@@ -1,13 +1,22 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SignIn.aspx.cs" Inherits="PizzaApp.SignIn" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
     <title>PizzaShop</title>
     <link href="/Styles/StyleSheet.css" rel="Stylesheet" type="text/css" />
+    <style type="text/css">
+        .watermarked
+        {
+            background-color: #F0F8FF !important;
+            color: #808080 !important;
+        }
+    </style>
 </head>
 <body>
     <form id="form1" runat="server">
+    <ajaxToolkit:ToolkitScriptManager EnablePartialRendering="true" runat="Server" ID="ScriptManager1" />
     <div>
         <div class='navbar navbar-static-top'>
             <div class='navbar-inner'>
@@ -29,12 +38,17 @@
             </div>
         </div>
         <div class='container' id='content'>
-        <div id="divAlertMessage" runat="server" visible="false">
-            <button class="close" data-dismiss="alert" id="buttonAlertMessage" runat="server">×</button>
-            <label id="labelAlertMessage" runat="server"></label>
-        </div>     
-            <h2>SignIn</h2>
-			<p>Sign in with your PizzaShop account. Don't have an account yet? <a href="/Users/SignUp.aspx">Sign up</a> for one.</p>
+            <div id="divAlertMessage" runat="server" visible="false">
+                <button class="close" data-dismiss="alert" id="buttonAlertMessage" runat="server">
+                    ×</button>
+                <label id="labelAlertMessage" runat="server">
+                </label>
+            </div>
+            <h2>
+                SignIn</h2>
+            <p>
+                Sign in with your PizzaShop account. Don't have an account yet? <a href="/Users/SignUp.aspx">
+                    Sign up</a> for one.</p>
             <div style="margin: 0; padding: 0; display: inline">
                 <input name="utf8" type="hidden" value="&#x2713;" />
                 <input name="authenticity_token" type="hidden" value="Xw375OCUATPvjL7T9Uu60e+p12YNqhGGuYdmC8sgNIc=" />
@@ -43,14 +57,20 @@
                 <label class="email optional control-label" for="user_email">
                     Email</label>
                 <div class="controls">
-                    <asp:TextBox ID="TextBoxEmail" runat="server" CssClass="string email optional" Height="3%"
-                        ValidationGroup="SignInGroup" placeholder="dummy@email.com"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ControlToValidate="TextBoxEmail"
-                        Display="Dynamic" ErrorMessage="Please enter Email ID." ForeColor="#FF0000" runat="server"
-                        ValidationGroup="SignInGroup" />
-                    <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"
-                        ControlToValidate="TextBoxEmail" ErrorMessage="Please enter valid Email ID."
-                        ForeColor="#FF0000" ValidationGroup="SignInGroup" />
+                    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                        <ContentTemplate>
+                            <asp:TextBox ID="TextBoxEmail" runat="server" CssClass="string email required" Height="3%"
+                                ValidationGroup="SignInGroup"></asp:TextBox>
+                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" ControlToValidate="TextBoxEmail"
+                                Display="Dynamic" ErrorMessage="Please enter Email ID." ForeColor="#FF0000" runat="server"
+                                ValidationGroup="SignInGroup" />
+                            <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*"
+                                ControlToValidate="TextBoxEmail" ErrorMessage="Please enter valid Email ID."
+                                ForeColor="#FF0000" ValidationGroup="SignInGroup" />
+                            <ajaxToolkit:TextBoxWatermarkExtender ID="TextBoxWatermarkExtender1" runat="server"
+                                TargetControlID="TextBoxEmail" WatermarkText="dummy@email.com" WatermarkCssClass="watermarked" />
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
                 </div>
             </div>
             <div class="control-group password optional">
@@ -80,12 +100,15 @@
         <div class='navbar navbar-fixed-bottom' id='footer'>
             <div class='navbar-inner'>
                 <div class='container'>
-                    <p class='pull-right'>Powered by PayPal REST APIs</p>
+                    <p class='pull-right'>
+                        Powered by PayPal REST APIs</p>
                 </div>
             </div>
         </div>
     </div>
     </form>
+
     <script language="javascript" type="text/javascript" src="/Scripts/Application.js"></script>
+
 </body>
 </html>
