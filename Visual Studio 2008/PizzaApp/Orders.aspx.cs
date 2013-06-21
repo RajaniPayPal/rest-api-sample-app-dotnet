@@ -27,7 +27,7 @@ namespace PizzaApp
         {
             get
             {
-                string clntID = ConfigManager.Instance.GetProperty("ClientID");
+                string clntID = ConfigManager.Instance.GetProperties()["ClientID"];
                 return clntID;
             }
         }
@@ -36,7 +36,7 @@ namespace PizzaApp
         {
             get
             {
-                string clntSecret = ConfigManager.Instance.GetProperty("ClientSecret");
+                string clntSecret = ConfigManager.Instance.GetProperties()["ClientSecret"];
                 return clntSecret;
             }
         }

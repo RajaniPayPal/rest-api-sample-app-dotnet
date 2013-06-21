@@ -26,7 +26,7 @@ namespace PizzaApp
         {
             get
             {
-                string clntID = ConfigManager.Instance.GetProperty("ClientID");
+                string clntID = ConfigManager.Instance.GetProperties()["ClientID"];
                 return clntID;
             }
         }
@@ -35,7 +35,7 @@ namespace PizzaApp
         {
             get
             {
-                string clntSecret = ConfigManager.Instance.GetProperty("ClientSecret");
+                string clntSecret = ConfigManager.Instance.GetProperties()["ClientSecret"];
                 return clntSecret;
             }
         }
@@ -110,8 +110,8 @@ namespace PizzaApp
             credCard.number = TextBoxCreditCardNumber.Text.Trim();
             credCard.cvv2 = TextBoxCreditCardCVV2.Text.Trim();
             credCard.type = DropDownListCreditCardType.SelectedValue.ToString().Trim();
-            credCard.expire_month = DropDownListCreditCardExpireMonth.SelectedValue.ToString().Trim();
-            credCard.expire_year = DropDownListCreditCardExpireYear.SelectedValue.ToString().Trim();
+            credCard.expire_month = System.Convert.ToInt32(DropDownListCreditCardExpireMonth.SelectedValue.ToString().Trim());
+            credCard.expire_year = System.Convert.ToInt32(DropDownListCreditCardExpireYear.SelectedValue.ToString().Trim());
             CrdtCard = credCard.Create(accessToken);
             return CrdtCard;
         }
@@ -128,7 +128,7 @@ namespace PizzaApp
             var dateTimeNow = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.FFFFF");
             var currentSignInAt = dateTimeNow;
             var lastSignInAt = string.Empty;
-            var signInIPAddress = ConfigManager.Instance.GetProperty("IPAddress");
+            var signInIPAddress = "";
             var currentSignInIP = signInIPAddress;
             var lastSignInIP = string.Empty;
             var createdAt = string.Empty;
@@ -211,8 +211,8 @@ namespace PizzaApp
                 CreditCard crdtCard = CreditCard.Get(accessToken, creditCardID);
                 TextBoxExistingCreditCardType.Text = crdtCard.type.Trim();
                 TextBoxExistingCreditCardNumber.Text = crdtCard.number.Trim();
-                TextBoxExistingCreditCardExpireMonth.Text = crdtCard.expire_month.Trim();
-                TextBoxExistingCreditCardExpireYear.Text = crdtCard.expire_year.Trim();
+                TextBoxExistingCreditCardExpireMonth.Text = crdtCard.expire_month.ToString();
+                TextBoxExistingCreditCardExpireYear.Text = crdtCard.expire_year.ToString();
                 isSuccess = true;
             }
             return isSuccess;

@@ -27,7 +27,7 @@ namespace PizzaApp
         {
             get
             {
-                string clntID = ConfigManager.Instance.GetProperty("ClientID");
+                string clntID = ConfigManager.Instance.GetProperties()["ClientID"];
                 return clntID;
             }
         }
@@ -36,7 +36,7 @@ namespace PizzaApp
         {
             get
             {
-                string clntSecret = ConfigManager.Instance.GetProperty("ClientSecret");
+                string clntSecret = ConfigManager.Instance.GetProperties()["ClientSecret"];
                 return clntSecret;
             }
         }
@@ -162,7 +162,7 @@ namespace PizzaApp
         {
             Payment pymnt = null;
 
-            AmountDetails amountDetails = new AmountDetails();
+            Details amountDetails = new Details();
             amountDetails.shipping = "2";
             amountDetails.tax = "1";
             amountDetails.subtotal = orderAmount;
@@ -339,8 +339,8 @@ namespace PizzaApp
         private string GetApprovalURL(Payment payment)
         {
             string redirectUrl = null;
-            List<Link> links = payment.links;
-            foreach (Link lnk in links)
+            List<Links> links = payment.links;
+            foreach (Links lnk in links)
             {
                 if (lnk.rel.ToLower().Equals("approval_url"))
                 {
