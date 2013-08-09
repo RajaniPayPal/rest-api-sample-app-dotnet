@@ -36,7 +36,7 @@ Please note: Web.config in Visual Studio 2008
 
 Please note: SQLite
 -------------------
-   * Please ensure that the following folders with interop dlls are added to your Visual Studio project solution 
+   * Please ensure that the following folders with Interop dlls are added to your Visual Studio project solution 
 	*	x64 - SQLite.Interop.dll
 	*	x86 - SQLite.Interop.dll
 
