@@ -15,7 +15,7 @@ The PizzaApp showcases the features of PayPal's REST APIs
 Pre-requisites
 --------------
    
-   * Visual Studio 2012 (MVC 3 targetting .NET Framework 4.5) [Note: Please check if MVC 3 templates are installed in Visual Studio 2012 if not download from MSDN]
+   * Visual Studio 2012 (MVC 3 ASPX targeting .NET Framework 4.5) [Note: Please check if MVC 3 templates are installed in Visual Studio 2012 if not download from MSDN]
 		Or
    * Visual Studio 2012 (.NET Framework 4.5) or higher
 		Or
@@ -26,16 +26,16 @@ Pre-requisites
    * Note: NuGet 2.2 requires .NET Framework 4.0 or higher
 
 
-Please note Web.config in Visual Studio 2008
---------------------------------------------
+Please note: Web.config in Visual Studio 2008
+---------------------------------------------
 
    * Please uncomment the following elements and their attributes in the Web.config file for Visual Studio 2008
 	*	"pages"
 	*	"httpHandlers"
 	*	"httpModules"
 
-Please note SQLite
-------------------
+Please note: SQLite
+-------------------
    * Please ensure that the following folders with interop dlls are added to your Visual Studio project solution 
 	*	x64 - SQLite.Interop.dll
 	*	x86 - SQLite.Interop.dll
@@ -176,7 +176,7 @@ On Clicking Apply and OK, NuGet Install will be added (as External Command 6*) t
    * Note : The External Command number may differ depending on the particular Visual Studio installation
 
 Menu --> Tools, clicking NuGet Install will pop up for NuGet Install Arguments and Command Line
-Also, NuGet Toolbar can be added, right-click on Visual Studio Menu and select Customize
+Also, NuGet Toolbar can be added, right-click on Visual Studio Menu and select
 Customize by clicking New
 Enter Toolbar name: NuGet and click OK
 Check NuGet Checkbox in the Toolbars tab for NuGet Toolbar to pop up
@@ -191,7 +191,8 @@ Drag and drop NuGet Toolbar to the Menu
 Click the NuGet Toolbar Install Package
 Clicking on the NuGet Toolbar Install Package will pop up for NuGet Install Arguments and Command Line
 Example NuGet Install:
-Enter Arguments: 
+Enter Arguments:
+
 ***************************************************
 
 Install RestApiSDK  -excludeversion -OutputDirectory .\packages
