@@ -12285,32 +12285,20 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 }(window.jQuery);
 
+//(function() {
+
+//  jQuery(function() {
+//    $("a[rel=popover]").popover();
+//    $(".tooltip").tooltip();
+//    return $("a[rel=tooltip]").tooltip();
+//  });
+
+//}).call(this);
+//(function() {
 
 
 
-
-
-
-
-
-
-
-
-
-(function() {
-
-  jQuery(function() {
-    $("a[rel=popover]").popover();
-    $(".tooltip").tooltip();
-    return $("a[rel=tooltip]").tooltip();
-  });
-
-}).call(this);
-(function() {
-
-
-
-}).call(this);
+//}).call(this);
 // This is a manifest file that'll be compiled into application.js, which will include all the files
 // listed below.
 //

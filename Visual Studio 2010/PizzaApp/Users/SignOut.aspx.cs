@@ -13,7 +13,7 @@ namespace PizzaApp
         protected void Page_Load(object sender, EventArgs e)
         {
             FormsAuthentication.SignOut();
-            Response.Redirect("~/Default.aspx?SignedIn=False");
+            Server.Transfer("~/Default.aspx?SignedIn=False");
         }
     }
 }

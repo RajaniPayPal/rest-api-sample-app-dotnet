@@ -125,7 +125,7 @@
         </ProgressTemplate>
     </asp:UpdateProgress> 
     </form>
-    <script language="javascript"  type="text/javascript"  src="/Scripts/Application.js"></script>
+    <script language="javascript" type="text/javascript" src="/Scripts/Application.js"></script>
 </body>
 </html>
 

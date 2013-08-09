@@ -76,6 +76,6 @@
         $(document).ready(function () {
             $('#<%=GridViewUserOrders.ClientID %>').Scrollable();
         })
-    </script>
+    </script>    
 </body>
 </html>

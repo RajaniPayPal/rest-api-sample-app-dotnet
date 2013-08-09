@@ -13,7 +13,8 @@
         <ul class="nav pull-right"> 
             <li id="ProfileActive"><%: Html.ActionLink("Profile", "Profile", "Account") %></li>                           
             <li id="SignOutActive"><%: Html.ActionLink("SignOut", "SignOut", "Account") %></li>
-        </ul>       
+        </ul>  
+        <div class="nav pull-right">Welcome <strong><%: Page.User.Identity.Name %></strong>!</div> 
 <%
     }
     else 

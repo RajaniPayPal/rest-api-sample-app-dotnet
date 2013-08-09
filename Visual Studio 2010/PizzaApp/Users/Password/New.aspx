@@ -61,6 +61,5 @@
         </div>
     </div>
     </form>
-    <script src="/Scripts/Application.js" type="text/javascript"></script>
 </body>
 </html>

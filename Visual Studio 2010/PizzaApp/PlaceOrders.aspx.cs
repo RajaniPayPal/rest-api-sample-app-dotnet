@@ -362,12 +362,12 @@ namespace PizzaApp
                 }
                 else
                 {
-                    Response.Redirect("~/Users/SignIn.aspx");
+                    Server.Transfer("~/Users/SignIn.aspx");
                 }
             }
             else
             {
-                Response.Redirect("~/Users/SignIn.aspx");
+                Server.Transfer("~/Users/SignIn.aspx");
             }
         }                
         
@@ -401,7 +401,7 @@ namespace PizzaApp
                         {
                             if (state.Trim().ToLower().Equals("approved"))
                             {
-                                Response.Redirect("~/Orders.aspx?Status=approved");
+                                Response.Redirect("/Orders.aspx?Status=approved"); 
                             }
                             else
                             {

@@ -16,13 +16,7 @@
             background-color: rgb(229, 229, 229);
         }  
     </style>
-    <div class="container" id="content">        
-        <div id="divAlertMessage" runat="server" visible="false">
-            <button class="close" data-dismiss="alert" id="buttonAlertMessage" runat="server">
-                ×</button>
-            <label id="labelAlertMessage" runat="server">
-            </label>
-        </div>
+    <div class="container" id="content"> 
         <div class="row pizza-row">
             <div class="span2">
                 <div class="image">

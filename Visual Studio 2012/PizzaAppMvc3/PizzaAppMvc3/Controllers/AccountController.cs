@@ -59,7 +59,7 @@ namespace PizzaAppMvc3
             cardCredit.cvv2 = model.NewCreditCardCVV2.Trim();
             cardCredit.expire_month = Convert.ToInt32(model.NewCreditCardExpireMonth.Trim());
             cardCredit.expire_year = Convert.ToInt32(model.NewCreditCardExpireYear.Trim());
-            card = cardCredit.Create(AccessToken);
+            card = cardCredit.Create(Api);
             return card;
         }
         #endregion
@@ -417,7 +417,7 @@ namespace PizzaAppMvc3
                 {
                     creditCardId = Convert.ToString(datTable.Rows[0]["credit_card_id"]);
                 }
-                CreditCard crdtCard = CreditCard.Get(AccessToken, creditCardId);
+                CreditCard crdtCard = CreditCard.Get(Api, creditCardId);
                 model.CurrentCreditCardNumber = crdtCard.number.Trim();
                 isSuccess = true;
             }

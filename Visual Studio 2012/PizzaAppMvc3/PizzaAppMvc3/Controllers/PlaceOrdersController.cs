@@ -323,7 +323,6 @@ namespace PizzaAppMvc3.Controllers
             pyment.intent = "sale";
             pyment.payer = payer;
             pyment.transactions = transactions;
-            var token = AccessToken;
             pay = pyment.Create(Api);
             return pay;
         }

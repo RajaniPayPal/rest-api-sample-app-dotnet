@@ -215,7 +215,7 @@ namespace PizzaApp
             }
             else
             {
-                Response.Redirect("~/Users/SignIn.aspx");
+                Server.Transfer("~/Users/SignIn.aspx");
             }            
         }
 

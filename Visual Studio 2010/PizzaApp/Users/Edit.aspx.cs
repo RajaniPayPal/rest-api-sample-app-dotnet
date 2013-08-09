@@ -225,7 +225,7 @@ namespace PizzaApp
             }
             else
             {
-                Response.Redirect("~/Default.aspx");
+                Server.Transfer("~/Default.aspx");
             }    
         }
 

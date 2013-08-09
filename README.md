@@ -14,11 +14,13 @@ The PizzaApp showcases the features of PayPal's REST APIs
 
 Pre-requisites
 --------------
-   * Visual Studio 2010 (.NET Framework 4.0) or higher
+   * Visual Studio 2012 (.NET Framework 4.5) or higher
+		Or
+   * Visual Studio 2010 (.NET Framework 4.0)
 		Or
    * Visual Studio 2008 (.NET Framework 3.5)
-   * Nuget 2.2 in case of NuGet Install
-   * Note: NuGet 2.2 requires .NET Framework 4.0
+   * Nuget 2.2 or higher in case of NuGet Install
+   * Note: NuGet 2.2 requires .NET Framework 4.0 or higher
 
 Running the sample
 ------------------
