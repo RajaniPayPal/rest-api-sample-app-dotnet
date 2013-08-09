@@ -30,10 +30,9 @@ Please note Web.config in Visual Studio 2008
 --------------------------------------------
 
    * Please uncomment the following elements for Visual Studio 2008 in the Web.config file
-   * <pages>
-   * <httpHandlers>
-   * <httpModules>
-
+	*	"<pages>"
+	*	"<httpHandlers>"
+	*	"<httpModules>"
 
 Please note SQLite
 ------------------
@@ -124,7 +123,8 @@ Run the following command from Windows Command Prompt:
 wmic product where "Name like 'Microsoft .Net%'" get Name, Version
 	
 Please wait for the command to execute, it may take more than a minute to execute
-Running the aforesaid command should list the .NET Framework versions installed as in this particular case:
+*	Running the aforesaid command should list the .NET Framework versions installed as in this particular case 
+*	[Please note the command might take a while to execute]
 
 Name                                                Version
 Microsoft .NET Compact Framework 1.0 SP3 Developer  1.0.4292
@@ -153,7 +153,7 @@ Or else
 
 Download NuGet.exe Command Line (free to download): http://nuget.codeplex.com/releases/view/58939
 
-Save NuGet.exe to a folder viz., 'C:\NuGet' and add its path to the Environment Variables Path:
+Save NuGet.exe to a folder viz., 'C:\NuGet' and add its path to the Environment Variables Path
 
 Visual Studio 2008
 Go to Visual Studio Menu --> Tools
