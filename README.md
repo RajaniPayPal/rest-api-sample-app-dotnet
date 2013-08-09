@@ -29,7 +29,7 @@ Pre-requisites
 Please note Web.config in Visual Studio 2008
 --------------------------------------------
 
-   * Please uncomment the following elements for Visual Studio 2008 in the Web.config file
+   * Please uncomment the following elements and their attributes in the Web.config file for Visual Studio 2008
 	*	"pages"
 	*	"httpHandlers"
 	*	"httpModules"
