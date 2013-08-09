@@ -14,6 +14,9 @@ The PizzaApp showcases the features of PayPal's REST APIs
 
 Pre-requisites
 --------------
+   
+   * Visual Studio 2012 (MVC 3 targetting .NET Framework 4.5) [Note: Please check if MVC 3 templates are installed in Visual Studio 2012 if not download from MSDN]
+		Or
    * Visual Studio 2012 (.NET Framework 4.5) or higher
 		Or
    * Visual Studio 2010 (.NET Framework 4.0)
@@ -22,11 +25,25 @@ Pre-requisites
    * Nuget 2.2 or higher in case of NuGet Install
    * Note: NuGet 2.2 requires .NET Framework 4.0 or higher
 
+
+Please note Web.config in Visual Studio 2008
+--------------------------------------------
+
+   * Please uncomment the following elements for Visual Studio 2008 in the Web.config file
+   * <pages>
+   * <httpHandlers>
+   * <httpModules>
+
+
+Please note SQLite
+------------------
+   * Please ensure that the following folders with interop dlls are added to your Visual Studio project solution 
+	*	x64 - SQLite.Interop.dll
+	*	x86 - SQLite.Interop.dll
+
 Running the sample
 ------------------
-
-   * Optionally, edit Web.Config to use your own client id / client secret pair from the developer portal.
-   * Run the app from within Visual Studio 2008/2010 or on IIS.
+   * Please use Visual Studio or IIS to run or host the samples 
 
 Dependent library references
 ----------------------------
@@ -40,8 +57,8 @@ Dependent library references
 SDK Integration
 ---------------
    * Integrate PayPal REST API SDK with an ASP.NET Web Application
+   * The NuGet package installs the dependencies to the solution and automatically updates the project in Visual Studio 2010 and 2012
    * Use NuGet.exe to install the dependencies in Visual Studio 2008
-   * The NuGet package installs the dependencies to the solution and automatically updates the project in Visual Studio 2010
 
 References
 ----------
@@ -78,15 +95,17 @@ Go to Solution Explorer and note the existing references
 Enter at PM>
 ***************************************************
 
-   * PM>Install-Package PayPalCoreSDK
-   * 	PayPalCoreSDK.dll
-   * 	log4net.dll
+   * PM>Install-Package RestApiSDK
+	*	RestApiSDK.dll
+	* 	PayPalCoreSDK.dll
+	* 	log4net.dll
+	*	Newtonsoft.Json.dll
+
    * PM>Install-Package System.Data.SQLite
 	*	System.Data.SQLite.dll
 	*	System.Data.SQLite.Linq.dll
-   * PM>Install-Package Newtonsoft.Json
-	*	Newtonsoft.Json.dll
-   * Note that the refrences get added automatically	
+
+   * Note that the refrences get added automatically in Visual Studio 2012 and 2010
 	
 ***************************************************
 
@@ -95,38 +114,48 @@ NuGet - Integrating NuGet with Visual Studio 2008
 -------------------------------------------------
 
 Prerequisites:
-   * 	.NET Framework 4.0
-   * 	NuGet.exe
+   * 	NuGet 2.2 or higher [Note: NuGet 2.2 or higher requires .NET Framework 4.0 or higher]
 	
-Check if .NET Framework 4.0 is installed in the computer from Control Panel --> Get programs
+Check if .NET Framework 4.0 or higher is installed in the Computer from Control Panel -> Get programs
 
-Or run the following command from Windows command prompt:
->dir  /b  %windir%\Microsoft.NET\Framework\v*
+Or else
 
-Running the aforesaid command should list the .NET Framework versions installed as follows:
-   * v1.0.3705
-   * v1.1.4322
-   * v2.0.50727
-   * v3.0
-   * v3.5
-   * v4.0.30319
+Run the following command from Windows Command Prompt:
+wmic product where "Name like 'Microsoft .Net%'" get Name, Version
+	
+Please wait for the command to execute, it may take more than a minute to execute
+Running the aforesaid command should list the .NET Framework versions installed as in this particular case:
 
-Note: Most Windows machines would have .NET Framework 4.0 installed as part of Windows (recommended) update.
+Name                                                Version
+Microsoft .NET Compact Framework 1.0 SP3 Developer  1.0.4292
+Microsoft .NET Framework 4.5                        4.5.50709
+Microsoft .NET Framework 4.5 Multi-Targeting Pack   4.5.50709
+Microsoft .NET Framework 2.0 SDK (x64) - ENU        2.0.50727
+Microsoft .NET Framework 4 Multi-Targeting Pack     4.0.30319
+Microsoft .NET Framework 4.5 SDK                    4.5.50709
+Microsoft .NET Compact Framework 2.0 SP2            2.0.7045
+Microsoft .NET Compact Framework 3.5                3.5.7283
+Microsoft .NET Framework 1.1                        1.1.4322
+Microsoft .NET Compact Framework 1.0 SP3            1.0.4294
+
+Note: Most Windows machines may have .NET Framework 4.0 or higher installed as part of Windows (Recommended) Update
 
 If V4.X is not installed, then download and install
-   * 	.NET Framework 4 (Standalone Installer) (free to download):
-http://www.microsoft.com/en-in/download/details.aspx?id=17718
 
-Or
+*	.NET Framework 4 or higher (Standalone Installer) - (Free to download):
+	http://www.microsoft.com/en-in/download/details.aspx?id=17718
 
-   * 	.NET Framework 4 (Web Installer) (free to download):
-http://www.microsoft.com/en-in/download/details.aspx?id=17851
+Or else
+
+*	.NET Framework 4 or higher (Web Installer) - (Free to download):
+	http://www.microsoft.com/en-in/download/details.aspx?id=17851
+
 
 Download NuGet.exe Command Line (free to download): http://nuget.codeplex.com/releases/view/58939
 
-Save NuGet.exe to folder viz., 'C:\NuGet' and add its path to the Environment Variables Path:
+Save NuGet.exe to a folder viz., 'C:\NuGet' and add its path to the Environment Variables Path:
 
-Visual Studio 2005 or 2008
+Visual Studio 2008
 Go to Visual Studio Menu --> Tools
 Select External Tools
 External Tools
@@ -136,7 +165,7 @@ External Tools having 5* default tools in the Menu contents, Click Add
 Enter the following:
 Title: NuGet Install
 Command (Having in Environment Variables Path): NuGet.exe
-Arguments: install your.package.name -excludeversion -outputDirectory .\Packages
+Arguments: Install your.package.name -OutputDirectory .\packages
 Initial directory: $(SolutionDir)
 Use Output window: Check
 Prompt for arguments: Check
@@ -165,11 +194,9 @@ Example NuGet Install:
 Enter Arguments: 
 ***************************************************
 
-install PayPalCoreSDK -excludeversion -outputDirectory .\Packages
+Install RestApiSDK  -excludeversion -OutputDirectory .\packages
 	
-install System.Data.SQLite -excludeversion -outputDirectory .\Packages
-  
-install Newtonsoft.Json -excludeversion -outputDirectory .\Packages
+Install System.Data.SQLite  -excludeversion -OutputDirectory .\packages
 
 ***************************************************
 

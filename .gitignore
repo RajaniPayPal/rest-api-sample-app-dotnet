@@ -5,6 +5,5 @@ obj
 
 #IDE files
 *.user
-*.suo
 *.pdb
 *.bak
