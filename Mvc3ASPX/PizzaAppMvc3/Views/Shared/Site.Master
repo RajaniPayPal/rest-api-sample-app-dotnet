@@ -10,19 +10,9 @@
 </head>
 <body>
     <div class="page">
-        <header>
-            <div class="navbar navbar-static-top">
-                <div class="navbar-inner">
-                    <div class="container">
-                        <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
-                            <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-                        </a>  
-                        <% Html.RenderPartial("Navigator"); %>             
-                    </div>
-                </div>
-            </div>
+        <header> 
+            <% Html.RenderPartial("Navigator"); %> 
         </header>
-
         <section id="main">
             <asp:ContentPlaceHolder ID="MainContent" runat="server" />
             <footer>  

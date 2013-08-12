@@ -128,7 +128,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Configuration.cs" />
-    <Compile Include="Helpers\LastException.cs" />
+    <Compile Include="Helpers\Message.cs" />
     <Compile Include="Helpers\PaymentMethod.cs" />
     <Compile Include="Helpers\Secure.cs" />
     <Compile Include="Navigator.ascx.cs">

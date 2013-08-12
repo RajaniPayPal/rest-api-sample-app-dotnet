@@ -152,7 +152,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\LastException.cs" />
+    <Compile Include="Helpers\Message.cs" />
     <Compile Include="Navigator.ascx.cs">
       <DependentUpon>Navigator.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
