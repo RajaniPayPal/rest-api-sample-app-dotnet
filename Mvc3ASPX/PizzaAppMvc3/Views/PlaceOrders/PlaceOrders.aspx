@@ -16,7 +16,7 @@
         } 
     </style>
     <div class="container">
-        <h2>Place Orders</h2>
+        <h2>Place Order</h2>
         <script src="<%: Url.Content("~/Scripts/jquery.validate.min.js") %>" type="text/javascript"></script>
         <script src="<%: Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js") %>" type="text/javascript"></script>
         <% using (Html.BeginForm()) { %>
@@ -41,7 +41,7 @@
                     <%: Html.DropDownListFor(m => m.PaymentType, new SelectList(Model.PaymentTypes, "Value", "Text")) %>    
                 </div>          
                 <p>
-                    <input type="submit" value="Place Orders" class="btn btn btn-primary" />
+                    <input type="submit" value="Place order" class="btn btn btn-primary" />
                 </p>
             </div>
         <% } %>

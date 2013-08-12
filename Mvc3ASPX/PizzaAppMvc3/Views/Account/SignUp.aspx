@@ -79,7 +79,7 @@
                         <%: Html.DropDownListFor(m => m.CreditCardExpireYear, new SelectList(Model.CreditCardExpireYears, "Value", "Text")) %>   
                 </div>
                 <p>
-                    <input type="submit" value="SignUp" class="btn btn btn-primary" />
+                    <input type="submit" value="Sign up" class="btn btn btn-primary" />
                 </p>
             </div>
         <% } %>

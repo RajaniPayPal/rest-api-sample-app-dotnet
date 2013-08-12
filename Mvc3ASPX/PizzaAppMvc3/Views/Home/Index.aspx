@@ -173,9 +173,9 @@
 		    <div class="span6 offset3">
 		    <p>This is a sample application which showcases the new PayPal REST APIs. The App uses mock data to demonstrate how you can use the REST APIs for the following operations:</p>
 		    <ul>
-			    <li>Saving credit card information with PayPal for later use</li>
-			    <li>Making payments using a saved credit card</li>
-			    <li>Making payments using PayPal</li>
+			    <li>Saving Credit Card information with PayPal for later use</li>
+			    <li>Making Payments using a saved Credit Card</li>
+			    <li>Making Payments using PayPal</li>
 		    </ul>
 		    </div>
 	    </div>

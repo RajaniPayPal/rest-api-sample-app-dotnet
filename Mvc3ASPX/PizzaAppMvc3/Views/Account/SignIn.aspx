@@ -44,7 +44,7 @@
                     <%: Html.LabelFor(m => m.Remember) %>
                 </div>                
                 <p>
-                    <input type="submit" value="SignIn" class="btn btn btn-primary" />
+                    <input type="submit" value="Sign in" class="btn btn btn-primary" />
                 </p>
             </div>
         <% } %>
