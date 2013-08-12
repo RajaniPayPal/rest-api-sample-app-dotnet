@@ -15,7 +15,8 @@ The PizzaApp showcases the features of PayPal's REST APIs
 Pre-requisites
 --------------
    
-   * Visual Studio 2012 (MVC 3 ASPX targeting .NET Framework 4.5) [Note: Please check if MVC 3 templates are installed in Visual Studio 2012 if not download from MSDN]
+   * Visual Studio 2012 (MVC 3 ASPX targeting .NET Framework 4.5) 
+   * [Note: Please check if MVC 3 templates are installed in Visual Studio 2012 if not download from MSDN]
 		Or
    * Visual Studio 2012 (.NET Framework 4.5) or higher
 		Or
@@ -24,6 +25,12 @@ Pre-requisites
    * Visual Studio 2008 (.NET Framework 3.5)
    * Nuget 2.2 or higher in case of NuGet Install
    * Note: NuGet 2.2 requires .NET Framework 4.0 or higher
+
+
+Please note: bin and obj folders
+---------------------------------------------
+
+   * Please delete the bin and obj folders before switching between different versions of Visual Studio 
 
 
 Please note: Web.config in Visual Studio 2008
