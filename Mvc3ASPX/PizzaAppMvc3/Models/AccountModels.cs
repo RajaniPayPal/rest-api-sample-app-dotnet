@@ -41,7 +41,8 @@ namespace PizzaAppMvc3
         [Required]
         [Display(Name = "Credit Card Number")]
         public string CreditCardNumber { get; set; }
-                
+
+        [Required]
         public string CreditCardType { get; set; }
 
         [Display(Name = "Credit Card Type")]
@@ -51,11 +52,13 @@ namespace PizzaAppMvc3
         [Display(Name = "Credit Card CVV2")]
         public string CreditCardCVV2 { get; set; }
 
+        [Required]
         public string CreditCardExpireMonth { get; set; }
 
         [Display(Name = "Credit Card Expire Month")]
         public System.Web.Mvc.SelectListItem[] CreditCardExpireMonths { get; set; }
 
+        [Required]
         public string CreditCardExpireYear { get; set; }
 
         [Display(Name = "Credit Card Expire Year")]
@@ -91,6 +94,7 @@ namespace PizzaAppMvc3
         [Display(Name = "New Credit Card Number")]
         public string NewCreditCardNumber { get; set; }
 
+        [Required]
         public string NewCreditCardType { get; set; }
 
         [Display(Name = "New Credit Card Type")]
@@ -100,11 +104,13 @@ namespace PizzaAppMvc3
         [Display(Name = "New Credit Card CVV2")]
         public string NewCreditCardCVV2 { get; set; }
 
+        [Required]
         public string NewCreditCardExpireMonth { get; set; }
 
         [Display(Name = "New Credit Card Expire Month")]
         public SelectListItem[] NewCreditCardExpireMonths { get; set; }
 
+        [Required]
         public string NewCreditCardExpireYear { get; set; }
 
         [Display(Name = "New Credit Card Expire Year")]

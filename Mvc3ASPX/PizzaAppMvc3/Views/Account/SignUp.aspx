@@ -57,7 +57,8 @@
                     <%: Html.LabelFor(m => m.CreditCardTypes) %>
                 </div>
                 <div class="controls"> 
-                    <%: Html.DropDownListFor(m => m.CreditCardType, new SelectList(Model.CreditCardTypes, "Value", "Text")) %>    
+                    <%: Html.DropDownListFor(m => m.CreditCardType, new SelectList(Model.CreditCardTypes, "Value", "Text")) %>   
+                    <%: Html.ValidationMessageFor(m => m.CreditCardType) %> 
                 </div>
                 <div class="string optional control-label">
                     <%: Html.LabelFor(m => m.CreditCardCVV2) %>
@@ -67,16 +68,18 @@
                     <%: Html.ValidationMessageFor(m => m.CreditCardCVV2) %>
                 </div>             
                 <div class="string optional control-label">
-                    <%: Html.LabelFor(m => m.CreditCardExpireMonths) %>
+                    <%: Html.LabelFor(m => m.CreditCardExpireMonths) %>                   
                 </div>
                 <div class="controls"> 
                         <%: Html.DropDownListFor(m => m.CreditCardExpireMonth, new SelectList(Model.CreditCardExpireMonths, "Value", "Text")) %>  
+                        <%: Html.ValidationMessageFor(m => m.CreditCardExpireMonth) %> 
                 </div>
                 <div class="string optional control-label">
                     <%: Html.LabelFor(m => m.CreditCardExpireYears) %>
                 </div>
                 <div class="controls"> 
-                        <%: Html.DropDownListFor(m => m.CreditCardExpireYear, new SelectList(Model.CreditCardExpireYears, "Value", "Text")) %>   
+                        <%: Html.DropDownListFor(m => m.CreditCardExpireYear, new SelectList(Model.CreditCardExpireYears, "Value", "Text")) %>  
+                        <%: Html.ValidationMessageFor(m => m.CreditCardExpireYear) %> 
                 </div>
                 <p>
                     <input type="submit" value="Sign up" class="btn btn btn-primary" />

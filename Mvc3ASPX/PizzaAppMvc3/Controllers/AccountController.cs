@@ -426,12 +426,12 @@ namespace PizzaAppMvc3
         #endregion
         
         #region Register
-        private SelectListItem[] RegisterCreditCardTypes()
+        private SelectListItem[] RegisterCreditCardTypes(bool isValid)
         {
             var model = new SignUpModel();
             model.CreditCardTypes = new[]
             {
-                new SelectListItem { Selected=true, Text = "--Select--", Value = "--Select--" }, 
+                new SelectListItem { Selected = isValid, Text = "--Select--", Value = string.Empty }, 
                 new SelectListItem { Text = "visa", Value = "visa" }, 
                 new SelectListItem { Text = "mastercard", Value = "mastercard" },
                 new SelectListItem { Text = "discover", Value = "discover" },
@@ -440,21 +440,21 @@ namespace PizzaAppMvc3
             return model.CreditCardTypes;
         }
 
-        private SelectListItem[] RegisterCreditCardExpireMonths()
+        private SelectListItem[] RegisterCreditCardExpireMonths(bool isValid)
         {
             var model = new SignUpModel();
             model.CreditCardExpireMonths = new[]
             {
-                new SelectListItem { Selected=true, Text = "--Select--", Value = "--Select--" }, 
-                new SelectListItem { Text = "1", Value = "1" }, 
-                new SelectListItem { Text = "2", Value = "2" },
-                new SelectListItem { Text = "3", Value = "3" },
-                new SelectListItem { Text = "4", Value = "4" },
-                new SelectListItem { Text = "5", Value = "5" }, 
-                new SelectListItem { Text = "6", Value = "6" },
-                new SelectListItem { Text = "7", Value = "7" },
-                new SelectListItem { Text = "8", Value = "8" },
-                new SelectListItem { Text = "9", Value = "9" }, 
+                new SelectListItem { Selected = isValid, Text = "--Select--", Value = string.Empty }, 
+                new SelectListItem { Text = "01", Value = "01" }, 
+                new SelectListItem { Text = "02", Value = "02" },
+                new SelectListItem { Text = "03", Value = "03" },
+                new SelectListItem { Text = "04", Value = "04" },
+                new SelectListItem { Text = "05", Value = "05" }, 
+                new SelectListItem { Text = "06", Value = "06" },
+                new SelectListItem { Text = "07", Value = "07" },
+                new SelectListItem { Text = "08", Value = "08" },
+                new SelectListItem { Text = "09", Value = "09" }, 
                 new SelectListItem { Text = "10", Value = "10" },
                 new SelectListItem { Text = "11", Value = "11" },
                 new SelectListItem { Text = "12", Value = "12" },
@@ -462,12 +462,12 @@ namespace PizzaAppMvc3
             return model.CreditCardExpireMonths;
         }
 
-        private SelectListItem[] RegisterCreditCardExpireYears()
+        private SelectListItem[] RegisterCreditCardExpireYears(bool isValid)
         {
             var model = new SignUpModel();
             model.CreditCardExpireYears = new[]
             {
-                new SelectListItem { Selected=true, Text = "--Select--", Value = "--Select--" }, 
+                new SelectListItem { Selected = isValid, Text = "--Select--", Value = string.Empty }, 
                 new SelectListItem { Text = "2013", Value = "2013" }, 
                 new SelectListItem { Text = "2014", Value = "2014" }, 
                 new SelectListItem { Text = "2015", Value = "2015" }, 
@@ -483,13 +483,13 @@ namespace PizzaAppMvc3
             return model.CreditCardExpireYears;
         }
 
-        private SelectListItem[] RegisterNewCreditCardTypes()
+        private SelectListItem[] RegisterNewCreditCardTypes(bool isValid)
         {
             var model = new ProfileModel();
 
             model.NewCreditCardTypes = new[]
             {
-                new SelectListItem { Selected=true, Text = "--Select--", Value = "--Select--" }, 
+                new SelectListItem { Selected = isValid, Text = "--Select--", Value = string.Empty }, 
                 new SelectListItem { Text = "visa", Value = "visa" }, 
                 new SelectListItem { Text = "mastercard", Value = "mastercard" },
                 new SelectListItem { Text = "discover", Value = "discover" },
@@ -498,22 +498,22 @@ namespace PizzaAppMvc3
             return model.NewCreditCardTypes;
         }
 
-        private SelectListItem[] RegisterNewCreditCardExpireMonths()
+        private SelectListItem[] RegisterNewCreditCardExpireMonths(bool isValid)
         {
             var model = new ProfileModel();
 
             model.NewCreditCardExpireMonths = new[]
             {
-                new SelectListItem { Selected=true, Text = "--Select--", Value = "--Select--" }, 
-                new SelectListItem { Text = "1", Value = "1" }, 
-                new SelectListItem { Text = "2", Value = "2" },
-                new SelectListItem { Text = "3", Value = "3" },
-                new SelectListItem { Text = "4", Value = "4" },
-                new SelectListItem { Text = "5", Value = "5" }, 
-                new SelectListItem { Text = "6", Value = "6" },
-                new SelectListItem { Text = "7", Value = "7" },
-                new SelectListItem { Text = "8", Value = "8" },
-                new SelectListItem { Text = "9", Value = "9" }, 
+                new SelectListItem { Selected = isValid, Text = "--Select--", Value = string.Empty }, 
+                new SelectListItem { Text = "01", Value = "01" }, 
+                new SelectListItem { Text = "02", Value = "02" },
+                new SelectListItem { Text = "03", Value = "03" },
+                new SelectListItem { Text = "04", Value = "04" },
+                new SelectListItem { Text = "05", Value = "05" }, 
+                new SelectListItem { Text = "06", Value = "06" },
+                new SelectListItem { Text = "07", Value = "07" },
+                new SelectListItem { Text = "08", Value = "08" },
+                new SelectListItem { Text = "09", Value = "09" },
                 new SelectListItem { Text = "10", Value = "10" },
                 new SelectListItem { Text = "11", Value = "11" },
                 new SelectListItem { Text = "12", Value = "12" },
@@ -521,13 +521,13 @@ namespace PizzaAppMvc3
             return model.NewCreditCardExpireMonths;
         }
 
-        private SelectListItem[] RegisterNewCreditCardExpireYears()
+        private SelectListItem[] RegisterNewCreditCardExpireYears(bool isValid)
         {
             var model = new ProfileModel();
 
             model.NewCreditCardExpireYears = new[]
             {
-                new SelectListItem { Selected=true, Text = "--Select--", Value = "--Select--" }, 
+                new SelectListItem { Selected = isValid, Text = "--Select--", Value = string.Empty }, 
                 new SelectListItem { Text = "2013", Value = "2013" }, 
                 new SelectListItem { Text = "2014", Value = "2014" }, 
                 new SelectListItem { Text = "2015", Value = "2015" }, 
@@ -541,7 +541,7 @@ namespace PizzaAppMvc3
                 new SelectListItem { Text = "2023", Value = "2023" }, 
             };
             return model.NewCreditCardExpireYears;
-        }
+        }      
         #endregion
 
         #region ActionResult
@@ -607,11 +607,11 @@ namespace PizzaAppMvc3
         public ActionResult SignUp()
         {
             var model = new SignUpModel();
-            model.CreditCardTypes = RegisterCreditCardTypes();
+            model.CreditCardTypes = RegisterCreditCardTypes(false);
             model.CreditCardType = string.Empty;
-            model.CreditCardExpireMonths = RegisterCreditCardExpireMonths();
+            model.CreditCardExpireMonths = RegisterCreditCardExpireMonths(false);
             model.CreditCardExpireMonth = string.Empty;
-            model.CreditCardExpireYears = RegisterCreditCardExpireYears();
+            model.CreditCardExpireYears = RegisterCreditCardExpireYears(false);
             model.CreditCardExpireYear = string.Empty;
             return View(model);
         }
@@ -646,17 +646,17 @@ namespace PizzaAppMvc3
 
             if (model.CreditCardTypes == null)
             {
-                model.CreditCardTypes = RegisterCreditCardTypes();
+                model.CreditCardTypes = RegisterCreditCardTypes(true);
             }        
 
             if (model.CreditCardExpireMonths == null)
             {
-                model.CreditCardExpireMonths = RegisterCreditCardExpireMonths();
+                model.CreditCardExpireMonths = RegisterCreditCardExpireMonths(true);
             }
 
             if (model.CreditCardExpireYears == null)
             {
-                model.CreditCardExpireYears = RegisterCreditCardExpireYears();
+                model.CreditCardExpireYears = RegisterCreditCardExpireYears(true);
             }
             return View(model);
         }
@@ -668,11 +668,11 @@ namespace PizzaAppMvc3
         public ActionResult Profile()
         {
             var model = new ProfileModel();
-            model.NewCreditCardTypes = RegisterNewCreditCardTypes();
+            model.NewCreditCardTypes = RegisterNewCreditCardTypes(false);
             model.NewCreditCardType = string.Empty;
-            model.NewCreditCardExpireMonths = RegisterNewCreditCardExpireMonths();
+            model.NewCreditCardExpireMonths = RegisterNewCreditCardExpireMonths(false);
             model.NewCreditCardExpireMonth = string.Empty;
-            model.NewCreditCardExpireYears = RegisterNewCreditCardExpireYears();
+            model.NewCreditCardExpireYears = RegisterNewCreditCardExpireYears(false);
             model.NewCreditCardExpireYear = string.Empty;
 
             if (User.Identity.IsAuthenticated)
@@ -729,17 +729,17 @@ namespace PizzaAppMvc3
 
             if (model.NewCreditCardTypes == null)
             {
-                model.NewCreditCardTypes = RegisterNewCreditCardTypes();
+                model.NewCreditCardTypes = RegisterNewCreditCardTypes(true);
             }
 
             if (model.NewCreditCardExpireMonths == null)
             {
-                model.NewCreditCardExpireMonths = RegisterNewCreditCardExpireMonths();
+                model.NewCreditCardExpireMonths = RegisterNewCreditCardExpireMonths(true);
             }
 
             if (model.NewCreditCardExpireYears == null)
             {
-                model.NewCreditCardExpireYears = RegisterNewCreditCardExpireYears();
+                model.NewCreditCardExpireYears = RegisterNewCreditCardExpireYears(true);
             }
             return View(model);
         }

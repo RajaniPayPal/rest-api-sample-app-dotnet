@@ -68,26 +68,29 @@
                 <%: Html.LabelFor(m => m.NewCreditCardTypes) %>
             </div>
             <div class="controls"> 
-                <%: Html.DropDownListFor(m => m.NewCreditCardType, new SelectList(Model.NewCreditCardTypes, "Value", "Text")) %>    
+                <%: Html.DropDownListFor(m => m.NewCreditCardType, new SelectList(Model.NewCreditCardTypes, "Value", "Text")) %>  
+                <%: Html.ValidationMessageFor(m => m.NewCreditCardType) %>  
             </div>
             <div class="string optional control-label">
                 <%: Html.LabelFor(m => m.NewCreditCardCVV2) %>
             </div>
             <div class="controls">
                 <%: Html.TextBoxFor(m => m.NewCreditCardCVV2) %>
-                 <%: Html.ValidationMessageFor(m => m.NewCreditCardCVV2) %>
+                <%: Html.ValidationMessageFor(m => m.NewCreditCardCVV2) %>
             </div>             
             <div class="string optional control-label">
                 <%: Html.LabelFor(m => m.NewCreditCardExpireMonths) %>
             </div>
             <div class="controls"> 
-                    <%: Html.DropDownListFor(m => m.NewCreditCardExpireMonth, new SelectList(Model.NewCreditCardExpireMonths, "Value", "Text")) %>  
+                <%: Html.DropDownListFor(m => m.NewCreditCardExpireMonth, new SelectList(Model.NewCreditCardExpireMonths, "Value", "Text")) %>  
+                <%: Html.ValidationMessageFor(m => m.NewCreditCardExpireMonth) %> 
             </div>
             <div class="string optional control-label">
                 <%: Html.LabelFor(m => m.NewCreditCardExpireYears) %>
             </div>
             <div class="controls"> 
-                    <%: Html.DropDownListFor(m => m.NewCreditCardExpireYear, new SelectList(Model.NewCreditCardExpireYears, "Value", "Text")) %>   
+                <%: Html.DropDownListFor(m => m.NewCreditCardExpireYear, new SelectList(Model.NewCreditCardExpireYears, "Value", "Text")) %> 
+                <%: Html.ValidationMessageFor(m => m.NewCreditCardExpireYear) %>   
             </div>
             <p>
                 <input type="submit" value="Update" class="btn btn btn-primary" />
