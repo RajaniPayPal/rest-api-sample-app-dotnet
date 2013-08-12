@@ -140,8 +140,18 @@ namespace PizzaApp
                 if (signInCount > 0)
                 {
                     bool isSuccess = Update(email);
+                } 
+
+                if (Request.QueryString["order[amount]"] != null && Request.QueryString["order[description]"] != null)
+                {
+                    FormsAuthentication.SetAuthCookie(TextBoxEmail.Text.Trim(), CheckBoxPersist.Checked);
+                    Response.Redirect("~/PlaceOrders/PlaceOrders.aspx" + Request.Url.Query);
                 }
-                FormsAuthentication.RedirectFromLoginPage(TextBoxEmail.Text.Trim(), CheckBoxPersist.Checked);
+                else
+                {
+                    FormsAuthentication.RedirectFromLoginPage(TextBoxEmail.Text.Trim(), CheckBoxPersist.Checked);
+                }
+
             }
             else
             {

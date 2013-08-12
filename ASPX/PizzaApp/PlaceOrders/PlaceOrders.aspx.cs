@@ -346,6 +346,8 @@ namespace PizzaApp
         #region Event Handlers
         protected void Page_Init(Object sender, EventArgs e)
         {
+            var v = Request.UrlReferrer;
+
             if (HttpContext.Current.User.Identity.IsAuthenticated)
             {
                 if (Request.QueryString["order[amount]"] != null && Request.QueryString["order[description]"] != null)
@@ -360,7 +362,14 @@ namespace PizzaApp
             }
             else
             {
-                Response.Redirect("~/Account/SignIn.aspx");
+                if (Request.QueryString["order[amount]"] != null && Request.QueryString["order[description]"] != null)
+                {
+                    Response.Redirect("~/Account/SignIn.aspx" + Request.Url.Query);
+                }
+                else
+                {
+                    Response.Redirect("~/Account/SignIn.aspx");
+                }
             }
         }     
 
