@@ -4,6 +4,7 @@ namespace PizzaAppMvc3
 {
     public class HomeController : Controller
     {
+        #region ActionResult
         //
         // GET: /Home/
 
@@ -11,5 +12,7 @@ namespace PizzaAppMvc3
         {
             return View();
         }
+
+        #endregion
     }
 }

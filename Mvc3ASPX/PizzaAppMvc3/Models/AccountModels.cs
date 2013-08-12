@@ -41,12 +41,13 @@ namespace PizzaAppMvc3
         [Required]
         [Display(Name = "Credit Card Number")]
         public string CreditCardNumber { get; set; }
-
+                
         public string CreditCardType { get; set; }
 
         [Display(Name = "Credit Card Type")]
         public System.Web.Mvc.SelectListItem[] CreditCardTypes { get; set; }
 
+        [Required]
         [Display(Name = "Credit Card CVV2")]
         public string CreditCardCVV2 { get; set; }
 
@@ -95,6 +96,7 @@ namespace PizzaAppMvc3
         [Display(Name = "New Credit Card Type")]
         public SelectListItem[] NewCreditCardTypes { get; set; }
 
+        [Required]
         [Display(Name = "New Credit Card CVV2")]
         public string NewCreditCardCVV2 { get; set; }
 

@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-
 
 namespace PizzaApp
 {
     public partial class Error : System.Web.UI.Page
     {
+        #region Event Handlers
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -35,5 +30,6 @@ namespace PizzaApp
                 DetailLinkButton.Text = "Hide Details";
             }
         }
+        #endregion
     }
 }

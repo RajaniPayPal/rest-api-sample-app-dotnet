@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Configuration;
-
-// Install-Package System.Data.SQLite 
 using System.Data.SQLite;
 
 namespace PizzaAppMvc3

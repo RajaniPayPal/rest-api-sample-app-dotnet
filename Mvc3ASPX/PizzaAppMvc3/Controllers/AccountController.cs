@@ -12,58 +12,6 @@ namespace PizzaAppMvc3
 {
     public class AccountController : Controller
     {
-        #region Paypal
-        private string AccessToken
-        {
-            get
-            {
-                string token = new OAuthTokenCredential
-                                (
-                                   "EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM",
-                                    "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM",
-                                    Configuration.GetConfiguration()
-                                ).GetAccessToken();
-                return token;
-            }
-        }
-
-        private APIContext Api
-        {
-            get
-            {
-                APIContext context = new APIContext(AccessToken);
-                context.Config = Configuration.GetConfiguration();
-                return context;
-            }
-        }
-
-        public CreditCard CreateCreditCard(SignUpModel model)
-        {
-            CreditCard card = null;
-            CreditCard cardCredit = new CreditCard();
-            cardCredit.number = model.CreditCardNumber.Trim();
-            cardCredit.type = model.CreditCardType.Trim();
-            cardCredit.cvv2 = model.CreditCardCVV2.Trim();
-            cardCredit.expire_month = Convert.ToInt32(model.CreditCardExpireMonth.Trim());
-            cardCredit.expire_year = Convert.ToInt32(model.CreditCardExpireYear.Trim());
-            card = cardCredit.Create(Api);
-            return card;
-        }
-
-        public CreditCard CreateCreditCard(ProfileModel model)
-        {
-            CreditCard card = null;
-            CreditCard cardCredit = new CreditCard();
-            cardCredit.number = model.NewCreditCardNumber.Trim();
-            cardCredit.type = model.NewCreditCardType.Trim();
-            cardCredit.cvv2 = model.NewCreditCardCVV2.Trim();
-            cardCredit.expire_month = Convert.ToInt32(model.NewCreditCardExpireMonth.Trim());
-            cardCredit.expire_year = Convert.ToInt32(model.NewCreditCardExpireYear.Trim());
-            card = cardCredit.Create(Api);
-            return card;
-        }
-        #endregion
-
         #region Data
         private DataAccessLayer dataAccessObject;
 
@@ -425,6 +373,58 @@ namespace PizzaAppMvc3
         }
         #endregion
 
+        #region Paypal
+        private string AccessToken
+        {
+            get
+            {
+                string token = new OAuthTokenCredential
+                                (
+                                   "EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM",
+                                    "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM",
+                                    Configuration.GetConfiguration()
+                                ).GetAccessToken();
+                return token;
+            }
+        }
+
+        private APIContext Api
+        {
+            get
+            {
+                APIContext context = new APIContext(AccessToken);
+                context.Config = Configuration.GetConfiguration();
+                return context;
+            }
+        }
+
+        public CreditCard CreateCreditCard(SignUpModel model)
+        {
+            CreditCard card = null;
+            CreditCard cardCredit = new CreditCard();
+            cardCredit.number = model.CreditCardNumber.Trim();
+            cardCredit.type = model.CreditCardType.Trim();
+            cardCredit.cvv2 = model.CreditCardCVV2.Trim();
+            cardCredit.expire_month = Convert.ToInt32(model.CreditCardExpireMonth.Trim());
+            cardCredit.expire_year = Convert.ToInt32(model.CreditCardExpireYear.Trim());
+            card = cardCredit.Create(Api);
+            return card;
+        }
+
+        public CreditCard CreateCreditCard(ProfileModel model)
+        {
+            CreditCard card = null;
+            CreditCard cardCredit = new CreditCard();
+            cardCredit.number = model.NewCreditCardNumber.Trim();
+            cardCredit.type = model.NewCreditCardType.Trim();
+            cardCredit.cvv2 = model.NewCreditCardCVV2.Trim();
+            cardCredit.expire_month = Convert.ToInt32(model.NewCreditCardExpireMonth.Trim());
+            cardCredit.expire_year = Convert.ToInt32(model.NewCreditCardExpireYear.Trim());
+            card = cardCredit.Create(Api);
+            return card;
+        }
+        #endregion
+        
         #region Register
         private SelectListItem[] RegisterCreditCardTypes()
         {

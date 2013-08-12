@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<PizzaAppMvc3.ProfileModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
-    Profile
+    PizzaShop
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -75,6 +75,7 @@
             </div>
             <div class="controls">
                 <%: Html.TextBoxFor(m => m.NewCreditCardCVV2) %>
+                 <%: Html.ValidationMessageFor(m => m.NewCreditCardCVV2) %>
             </div>             
             <div class="string optional control-label">
                 <%: Html.LabelFor(m => m.NewCreditCardExpireMonths) %>

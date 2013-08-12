@@ -1,55 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
-using System.Web.Security;
-using System.Web.SessionState;
-using PizzaApp;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using System.Net.Security;
+using System.Web.UI;
 
 namespace PizzaApp
 {
-    public class Global : System.Web.HttpApplication
+    public class Global : HttpApplication
     {
-
-        protected void Application_Start(object sender, EventArgs e)
+        void Application_Start(object sender, EventArgs e) 
         {
-            log4net.Config.XmlConfigurator.Configure();
+            #if NET_4_5
+            ScriptManager.ScriptResourceMapping.AddDefinition("jquery",
+            new ScriptResourceDefinition
+            {
+                Path = "~/Scripts/jquery-1.10.2.min.js",
+                DebugPath = "~/Scripts/jquery-1.10.2.min.js",
+                CdnPath = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.4.1.min.js",
+                CdnDebugPath = "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.4.1.js"
+            });
+            #endif
         }
 
-        protected void Session_Start(object sender, EventArgs e)
-        {
+        void Application_End(object sender, EventArgs e) { }
 
-        }
-
-        protected void Application_BeginRequest(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Application_AuthenticateRequest(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Application_Error(object sender, EventArgs e)
+        void Application_Error(object sender, EventArgs e)
         {
             Message.LastException = Server.GetLastError().GetBaseException();
             string message = "Error Caught in Application_Error event\n" +
                 "Error in: " + Request.Url.ToString() +
                 "\nError Message:" + Message.LastException.Message.ToString() +
                 "\nStack Trace:" + Message.LastException.StackTrace.ToString();
-        }
-
-        protected void Session_End(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Application_End(object sender, EventArgs e)
-        {
 
         }
     }

@@ -12,34 +12,6 @@ namespace PizzaAppMvc3
 {
     public class OrdersController : Controller
     {
-        #region PayPal
-
-        private string AccessToken
-        {
-            get
-            {
-                string token = new OAuthTokenCredential
-                                (
-                                   "EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM",
-                                    "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM",
-                                    Configuration.GetConfiguration()
-                                ).GetAccessToken();
-                return token;
-            }
-        }
-
-        private APIContext Api
-        {
-            get
-            {
-                APIContext context = new APIContext(AccessToken);
-                context.Config = Configuration.GetConfiguration();
-                return context;
-            }
-        }
-
-        #endregion
-
         #region Data
 
         private DataAccessLayer dataAccessObject;
@@ -168,6 +140,34 @@ namespace PizzaAppMvc3
 
         #endregion
 
+        #region PayPal
+
+        private string AccessToken
+        {
+            get
+            {
+                string token = new OAuthTokenCredential
+                                (
+                                   "EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM",
+                                    "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM",
+                                    Configuration.GetConfiguration()
+                                ).GetAccessToken();
+                return token;
+            }
+        }
+
+        private APIContext Api
+        {
+            get
+            {
+                APIContext context = new APIContext(AccessToken);
+                context.Config = Configuration.GetConfiguration();
+                return context;
+            }
+        }
+
+        #endregion
+        
         #region ActionResult
 
         //

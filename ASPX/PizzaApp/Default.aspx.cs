@@ -4,26 +4,12 @@ using System.Web.UI;
 
 namespace PizzaApp
 {
-    public partial class Default : System.Web.UI.Page
+    public partial class _Default : System.Web.UI.Page
     {
+        #region Event Handlers
         protected void Page_Init(Object sender, EventArgs e)
         {
-            if (HttpContext.Current.User.Identity.IsAuthenticated)
-            {
-                hrefSignInStatus.Visible = false;
-                hrefSignOutStatus.Visible = true;
-                hrefSignUpStatus.Visible = false;
-                hrefOrders.Visible = true;
-                hrefProfile.Visible = true;
-            }
-            else
-            {
-                hrefSignInStatus.Visible = true;
-                hrefSignOutStatus.Visible = false;
-                hrefSignUpStatus.Visible = true;
-                hrefOrders.Visible = false;
-                hrefProfile.Visible = false;
-            }            
+           
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -40,7 +26,7 @@ namespace PizzaApp
                         {
                             divAlertMessage.Visible = true;
                             divAlertMessage.Attributes["class"] = "alert fade in alert-success";
-                            labelAlertMessage.InnerText = "SignedIn successfully.";
+                            LabelAlertMessage.Text = "Signed in successfully.";
                         }
                     }
                 }
@@ -55,13 +41,17 @@ namespace PizzaApp
 
                         if (!isSignedIn)
                         {
-                            divAlertMessage.Visible = true;
-                            divAlertMessage.Attributes["class"] = "alert fade in alert-success";
-                            labelAlertMessage.InnerText = "SignedOut successfully.";
+                            if(Request.UrlReferrer != null)
+                            {
+                                divAlertMessage.Visible = true;
+                                divAlertMessage.Attributes["class"] = "alert fade in alert-success";
+                                LabelAlertMessage.Text = "Signed out successfully.";
+                            }
                         }
                     }
                 }
             }
         }
+        #endregion
     }
 }
