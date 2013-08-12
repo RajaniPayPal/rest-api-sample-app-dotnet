@@ -346,8 +346,6 @@ namespace PizzaApp
         #region Event Handlers
         protected void Page_Init(Object sender, EventArgs e)
         {
-            var v = Request.UrlReferrer;
-
             if (HttpContext.Current.User.Identity.IsAuthenticated)
             {
                 if (Request.QueryString["order[amount]"] != null && Request.QueryString["order[description]"] != null)

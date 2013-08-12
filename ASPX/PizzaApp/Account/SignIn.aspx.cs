@@ -151,7 +151,6 @@ namespace PizzaApp
                 {
                     FormsAuthentication.RedirectFromLoginPage(TextBoxEmail.Text.Trim(), CheckBoxPersist.Checked);
                 }
-
             }
             else
             {
