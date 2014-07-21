@@ -1,0 +1,50 @@
+﻿@model PizzaAppMvc4Razor.PlaceOrdersModels
+
+@{
+    ViewBag.Title = "PlaceOrders";
+}
+
+<style type="text/css">
+    #OrdersActive {
+        color: #555555;
+        text-decoration: none;
+        box-shadow: inset 0px 3px 8px rgba(0,0,0,0.125);
+        background-color: rgb(229, 229, 229);
+    }
+</style>
+
+@Styles.Render("~/Styles/StyleValidation.css") 
+
+<div class="container">
+    <h2>Place Order</h2>
+    <br />
+    @using (Html.BeginForm())
+    {
+        <div>
+            <div class="string optional control-label">
+                @Html.LabelFor(m => m.Amount)
+            </div>
+            <div class="controls">
+                @Html.TextBoxFor(m => m.Amount, new { @readonly = "readonly" })
+            </div>
+
+            <div class="string optional control-label">
+                @Html.LabelFor(m => m.Description)
+            </div>
+            <div class="controls">
+                @Html.TextBoxFor(m => m.Description, new { @readonly = "readonly" })
+            </div>
+            <div class="string optional control-label">
+                @Html.LabelFor(m => m.PaymentTypes)
+            </div>
+            <div class="controls">
+                @Html.DropDownListFor(m => m.PaymentType, new SelectList(Model.PaymentTypes, "Value", "Text"))
+            </div>
+            <p>
+                <input type="submit" value="Place order" class="btn btn btn-primary" />
+            </p>
+        </div>
+    }
+</div>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
