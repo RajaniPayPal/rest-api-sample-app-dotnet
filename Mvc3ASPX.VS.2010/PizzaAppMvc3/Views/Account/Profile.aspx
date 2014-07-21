@@ -43,14 +43,21 @@
                 <%: Html.ValidationMessageFor(m => m.NewPassword) %>
             </div>                
             <div class="password required control-label">
-                <%: Html.LabelFor(m => m.ConfirmPassword) %>
+                <%: Html.LabelFor(m => m.ConfirmNewPassword) %>
             </div>
             <div class="string password required">
-                <%: Html.PasswordFor(m => m.ConfirmPassword) %>
-                <%: Html.ValidationMessageFor(m => m.ConfirmPassword) %>
+                <%: Html.PasswordFor(m => m.ConfirmNewPassword) %>
+                <%: Html.ValidationMessageFor(m => m.ConfirmNewPassword) %>
             </div>
-            <h4>Add Credit Card</h4>
+            <h4>Update Credit Card</h4>
             <p>Your credit card information is stored safely with PayPal.</p>
+            <div class="string optional control-label">
+                <%: Html.LabelFor(m => m.NewCreditCardTypes) %>
+            </div>
+            <div class="controls"> 
+                <%: Html.DropDownListFor(m => m.NewCreditCardType, new SelectList(Model.NewCreditCardTypes, "Value", "Text")) %>  
+                <%: Html.ValidationMessageFor(m => m.NewCreditCardType) %>  
+            </div>
             <div class="string optional control-label">
                 <%: Html.LabelFor(m => m.CurrentCreditCardNumber) %>
             </div>
@@ -63,14 +70,7 @@
             <div class="controls">
                 <%: Html.TextBoxFor(m => m.NewCreditCardNumber) %>
                 <%: Html.ValidationMessageFor(m => m.NewCreditCardNumber) %>
-            </div>
-            <div class="string optional control-label">
-                <%: Html.LabelFor(m => m.NewCreditCardTypes) %>
-            </div>
-            <div class="controls"> 
-                <%: Html.DropDownListFor(m => m.NewCreditCardType, new SelectList(Model.NewCreditCardTypes, "Value", "Text")) %>  
-                <%: Html.ValidationMessageFor(m => m.NewCreditCardType) %>  
-            </div>
+            </div>            
             <div class="string optional control-label">
                 <%: Html.LabelFor(m => m.NewCreditCardCVV2) %>
             </div>

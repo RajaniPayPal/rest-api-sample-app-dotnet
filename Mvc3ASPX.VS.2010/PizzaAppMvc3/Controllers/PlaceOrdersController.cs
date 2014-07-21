@@ -13,223 +13,229 @@ namespace PizzaAppMvc3
     public class PlaceOrdersController : Controller
     {
         #region Data
-        private DataAccessLayer dataAccessObject;
-
-        private bool Update(int orderID, string pymntID, string state, string amount, string description, string updatedAt)
-        {
-            bool isSuccess = false;
-            int rowsAffacted = 0;
-            StringBuilder sqliteQueryUpdate = new StringBuilder();
-            sqliteQueryUpdate.Append("UPDATE orders ");
-            sqliteQueryUpdate.Append("SET ");
-            sqliteQueryUpdate.Append("payment_id = @payment_id, ");
-            sqliteQueryUpdate.Append("state = @state, ");
-            sqliteQueryUpdate.Append("amount = @amount, ");
-            sqliteQueryUpdate.Append("description = @description, ");
-            sqliteQueryUpdate.Append("updated_at = @updated_at ");
-            sqliteQueryUpdate.Append("WHERE ");
-            sqliteQueryUpdate.Append("id = @id");
-            SQLiteDataAdapter sqliteDataAdapterUpdate = new SQLiteDataAdapter();
-            sqliteDataAdapterUpdate.UpdateCommand = new SQLiteCommand();
-            sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@payment_id", pymntID);
-            sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@state", state);
-            sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@amount", amount);
-            sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@description", description);
-            sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@updated_at", updatedAt);
-            sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@id", orderID);
-            dataAccessObject = new DataAccessLayer();
-            rowsAffacted = dataAccessObject.Update(sqliteQueryUpdate.ToString(), sqliteDataAdapterUpdate);
-            if (rowsAffacted > 0)
-            {
-                isSuccess = true;
-            }
-            return isSuccess;
-        }
-
-        private bool Insert(int userID, string pymntID, string state, string amount, string description, string createdAt, string updatedAt)
-        {
-            bool isSuccess = false;
-            int rowsAffacted = 0;
-            StringBuilder sqliteQueryInsert = new StringBuilder();
-            sqliteQueryInsert.Append("INSERT INTO orders");
-            sqliteQueryInsert.Append("(");
-            sqliteQueryInsert.Append("user_id, ");
-            sqliteQueryInsert.Append("payment_id, ");
-            sqliteQueryInsert.Append("state, ");
-            sqliteQueryInsert.Append("amount, ");
-            sqliteQueryInsert.Append("description, ");
-            sqliteQueryInsert.Append("created_at, ");
-            sqliteQueryInsert.Append("updated_at ");
-            sqliteQueryInsert.Append(") ");
-            sqliteQueryInsert.Append("VALUES ");
-            sqliteQueryInsert.Append("(");
-            sqliteQueryInsert.Append("@user_id, ");
-            sqliteQueryInsert.Append("@payment_id, ");
-            sqliteQueryInsert.Append("@state, ");
-            sqliteQueryInsert.Append("@amount,");
-            sqliteQueryInsert.Append("@description, ");
-            sqliteQueryInsert.Append("@created_at, ");
-            sqliteQueryInsert.Append("@updated_at ");
-            sqliteQueryInsert.Append(")");
-            SQLiteDataAdapter sqliteDataAdapterInsert = new SQLiteDataAdapter();
-            sqliteDataAdapterInsert.InsertCommand = new SQLiteCommand();
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@user_id", userID);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@payment_id", pymntID);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@state", state);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@amount", amount);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@description", description);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@created_at", createdAt);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@updated_at", updatedAt);
-            dataAccessObject = new DataAccessLayer();
-            rowsAffacted = dataAccessObject.Insert(sqliteQueryInsert.ToString(), sqliteDataAdapterInsert);
-            if (rowsAffacted > 0)
-            {
-                isSuccess = true;
-            }
-            return isSuccess;
-        }
-
-        private bool Insert(int userID, string createdAt, string updatedAt)
-        {
-            bool isSuccess = false;
-            int rowsAffacted = 0;
-            StringBuilder sqliteQueryInsert = new StringBuilder();
-            sqliteQueryInsert.Append("INSERT INTO orders");
-            sqliteQueryInsert.Append("(");
-            sqliteQueryInsert.Append("user_id, ");
-            sqliteQueryInsert.Append("created_at, ");
-            sqliteQueryInsert.Append("updated_at ");
-            sqliteQueryInsert.Append(") ");
-            sqliteQueryInsert.Append("VALUES ");
-            sqliteQueryInsert.Append("(");
-            sqliteQueryInsert.Append("@user_id, ");
-            sqliteQueryInsert.Append("@created_at, ");
-            sqliteQueryInsert.Append("@updated_at ");
-            sqliteQueryInsert.Append(")");
-            SQLiteDataAdapter sqliteDataAdapterInsert = new SQLiteDataAdapter();
-            sqliteDataAdapterInsert.InsertCommand = new SQLiteCommand();
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@user_id", userID);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@created_at", createdAt);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@updated_at", updatedAt);
-            dataAccessObject = new DataAccessLayer();
-            rowsAffacted = dataAccessObject.Insert(sqliteQueryInsert.ToString(), sqliteDataAdapterInsert);
-            if (rowsAffacted > 0)
-            {
-                isSuccess = true;
-            }
-            return isSuccess;
-        }
 
         private DataTable GetUser(string email)
         {
-            DataTable datTable = new DataTable();
-            StringBuilder sqliteQuerySelect = new StringBuilder();
-            sqliteQuerySelect.Append("SELECT ");
-            sqliteQuerySelect.Append("id, ");
-            sqliteQuerySelect.Append("email, ");
-            sqliteQuerySelect.Append("encrypted_password, ");
-            sqliteQuerySelect.Append("sign_in_count, ");
-            sqliteQuerySelect.Append("credit_card_id ");
-            sqliteQuerySelect.Append("FROM users ");
-            sqliteQuerySelect.Append("WHERE email = @email");
-            SQLiteDataAdapter sqliteDataAdapterSelect = new SQLiteDataAdapter();
-            sqliteDataAdapterSelect.SelectCommand = new SQLiteCommand();
-            sqliteDataAdapterSelect.SelectCommand.Parameters.AddWithValue("@email", email);
-            dataAccessObject = new DataAccessLayer();
-            datTable = dataAccessObject.Select(sqliteQuerySelect.ToString(), sqliteDataAdapterSelect);
+            DataTable datTable = null;
+            StringBuilder selectQuery = new StringBuilder();
+            selectQuery.Append("SELECT ");
+            selectQuery.Append("id, ");
+            selectQuery.Append("email, ");
+            selectQuery.Append("encrypted_password, ");
+            selectQuery.Append("sign_in_count, ");
+            selectQuery.Append("credit_card_id ");
+            selectQuery.Append("FROM users ");
+            selectQuery.Append("WHERE email = @email;");
+            using (SQLiteCommand commandSQLite = new SQLiteCommand(selectQuery.ToString()))
+            {
+                commandSQLite.Parameters.AddWithValue("@email", email);
+                DataAccessLayer dataAccessObject = new DataAccessLayer();
+                datTable = dataAccessObject.Select(commandSQLite);
+            }
             return datTable;
         }
 
-        private DataTable GetOrders(int userID)
+        private DataTable GetOrders(int userId)
         {
-            DataTable datTable = new DataTable();
-            StringBuilder sqliteQuerySelect = new StringBuilder();
-            sqliteQuerySelect.Append("SELECT ");
-            sqliteQuerySelect.Append("DISTINCT id, ");
-            sqliteQuerySelect.Append("user_id, ");
-            sqliteQuerySelect.Append("payment_id, ");
-            sqliteQuerySelect.Append("state, ");
-            sqliteQuerySelect.Append("amount, ");
-            sqliteQuerySelect.Append("description, ");
-            sqliteQuerySelect.Append("created_at, ");
-            sqliteQuerySelect.Append("updated_at ");
-            sqliteQuerySelect.Append("FROM orders ");
-            sqliteQuerySelect.Append("WHERE user_id = @user_id ORDER BY id DESC LIMIT 1");
-            SQLiteDataAdapter sqliteDataAdapterSelect = new SQLiteDataAdapter();
-            sqliteDataAdapterSelect.SelectCommand = new SQLiteCommand();
-            sqliteDataAdapterSelect.SelectCommand.Parameters.AddWithValue("@user_id", userID);
-            dataAccessObject = new DataAccessLayer();
-            datTable = dataAccessObject.Select(sqliteQuerySelect.ToString(), sqliteDataAdapterSelect);
+            DataTable datTable = null;
+            StringBuilder selectQuery = new StringBuilder();
+            selectQuery.Append("SELECT ");
+            selectQuery.Append("DISTINCT id, ");
+            selectQuery.Append("user_id, ");
+            selectQuery.Append("payment_id, ");
+            selectQuery.Append("state, ");
+            selectQuery.Append("amount, ");
+            selectQuery.Append("description, ");
+            selectQuery.Append("created_at, ");
+            selectQuery.Append("updated_at ");
+            selectQuery.Append("FROM orders ");
+            selectQuery.Append("WHERE user_id = @user_id ORDER BY id DESC LIMIT 1;");
+            using (SQLiteCommand commandSQLite = new SQLiteCommand(selectQuery.ToString()))
+            {
+                commandSQLite.Parameters.AddWithValue("@user_id", userId);
+                DataAccessLayer dataAccessObject = new DataAccessLayer();
+                datTable = dataAccessObject.Select(commandSQLite);
+            }
             return datTable;
         }
 
-        private int GetSignedInUserID(string email)
+        private int GetSignedInUserId(string email)
         {
-            int userID = 0;
+            int userId = 0;
             DataTable datTable = GetUser(email);
             if (datTable != null && datTable.Rows.Count > 0)
             {
-                var distinctRows = from DataRow dRow in datTable.Rows
-                                   where dRow.Field<string>("email") == email
-                                   select new { column1 = dRow["id"] };
+                var distinctRows = (from DataRow dRow in datTable.Rows
+                                    where dRow.Field<string>("email") == email
+                                    select new { column1 = dRow["id"] }).Distinct();
                 if (distinctRows != null)
                 {
                     foreach (var row in distinctRows)
                     {
-                        userID = Convert.ToInt32(row.column1);
+                        userId = Convert.ToInt32(row.column1);
                         break;
                     }
                 }
             }
-            return userID;
+            return userId;
         }
 
-        private string GetSignedInUserCreditCardID(string email)
+        private string GetSignedInUserCreditCardId(string email)
         {
-            string creditCardID = string.Empty;
+            string creditCardId = string.Empty;
 
             CreditCard crdtCard = new CreditCard();
             DataTable datTable = GetUser(email);
             if (datTable != null && datTable.Rows.Count > 0)
             {
-                var distinctRows = from DataRow dRow in datTable.Rows
-                                   where dRow.Field<string>("email") == email
-                                   select new { column1 = dRow["credit_card_id"] };
+                var distinctRows = (from DataRow dRow in datTable.Rows
+                                    where dRow.Field<string>("email") == email
+                                    select new { column1 = dRow["credit_card_id"] }).Distinct();
                 if (distinctRows != null)
                 {
                     foreach (var row in distinctRows)
                     {
-                        creditCardID = Convert.ToString(row.column1);
+                        creditCardId = Convert.ToString(row.column1);
                         break;
                     }
                 }
             }
-            return creditCardID;
+            return creditCardId;
         }
 
-        private int GetSignedInUserLastInsertedOrderID(int userID)
+        private int GetSignedInUserLastInsertedOrderId(int userId)
         {
-            int orderID = 0;
+            int orderId = 0;
             CreditCard crdtCard = new CreditCard();
-            DataTable datTable = GetOrders(userID);
+            DataTable datTable = GetOrders(userId);
             if (datTable != null && datTable.Rows.Count > 0)
             {
-                var distinctRows = from DataRow dRow in datTable.Rows
-                                   select new { column1 = dRow["id"] };
+                var distinctRows = (from DataRow dRow in datTable.Rows
+                                    select new { column1 = dRow["id"] }).Distinct();
                 if (distinctRows != null)
                 {
                     foreach (var row in distinctRows)
                     {
-                        orderID = Convert.ToInt32(row.column1);
+                        orderId = Convert.ToInt32(row.column1);
                         break;
                     }
                 }
             }
-            return orderID;
+            return orderId;
         }
+
+        private bool Insert(int userId, string payId, string state, string amount, string description, string createdAt, string updatedAt)
+        {
+            bool isSuccess = false;
+            int rowsAffected = 0;
+            StringBuilder insertQuery = new StringBuilder();
+            insertQuery.Append("INSERT INTO orders");
+            insertQuery.Append("(");
+            insertQuery.Append("user_id, ");
+            insertQuery.Append("payment_id, ");
+            insertQuery.Append("state, ");
+            insertQuery.Append("amount, ");
+            insertQuery.Append("description, ");
+            insertQuery.Append("created_at, ");
+            insertQuery.Append("updated_at ");
+            insertQuery.Append(") ");
+            insertQuery.Append("VALUES ");
+            insertQuery.Append("(");
+            insertQuery.Append("@user_id, ");
+            insertQuery.Append("@payment_id, ");
+            insertQuery.Append("@state, ");
+            insertQuery.Append("@amount,");
+            insertQuery.Append("@description, ");
+            insertQuery.Append("@created_at, ");
+            insertQuery.Append("@updated_at ");
+            insertQuery.Append(");");
+            using (SQLiteCommand commandSQLite = new SQLiteCommand(insertQuery.ToString()))
+            {
+                commandSQLite.Parameters.AddWithValue("@user_id", userId);
+                commandSQLite.Parameters.AddWithValue("@payment_id", payId);
+                commandSQLite.Parameters.AddWithValue("@state", state);
+                commandSQLite.Parameters.AddWithValue("@amount", amount);
+                commandSQLite.Parameters.AddWithValue("@description", description);
+                commandSQLite.Parameters.AddWithValue("@created_at", createdAt);
+                commandSQLite.Parameters.AddWithValue("@updated_at", updatedAt);
+                DataAccessLayer dataAccessObject = new DataAccessLayer();
+                rowsAffected = dataAccessObject.Execute(commandSQLite);
+            }
+            if (rowsAffected > 0)
+            {
+                isSuccess = true;
+            }
+            return isSuccess;
+        }
+
+        private bool Insert(int userId, string createdAt, string updatedAt)
+        {
+            bool isSuccess = false;
+            int rowsAffected = 0;
+            StringBuilder insertQuery = new StringBuilder();
+            insertQuery.Append("INSERT INTO orders");
+            insertQuery.Append("(");
+            insertQuery.Append("user_id, ");
+            insertQuery.Append("created_at, ");
+            insertQuery.Append("updated_at ");
+            insertQuery.Append(") ");
+            insertQuery.Append("VALUES ");
+            insertQuery.Append("(");
+            insertQuery.Append("@user_id, ");
+            insertQuery.Append("@created_at, ");
+            insertQuery.Append("@updated_at ");
+            insertQuery.Append(");");
+            using (SQLiteCommand commandSQLite = new SQLiteCommand(insertQuery.ToString()))
+            {
+                commandSQLite.Parameters.AddWithValue("@user_id", userId);
+                commandSQLite.Parameters.AddWithValue("@created_at", createdAt);
+                commandSQLite.Parameters.AddWithValue("@updated_at", updatedAt);
+                DataAccessLayer dataAccessObject = new DataAccessLayer();
+                rowsAffected = dataAccessObject.Execute(commandSQLite);
+            }
+            if (rowsAffected > 0)
+            {
+                isSuccess = true;
+            }
+            return isSuccess;
+        }
+
+        private bool Update(int orderId, string payId, string state, string amount, string description, string updatedAt)
+        {
+            bool isSuccess = false;
+            int rowsAffected = 0;
+            StringBuilder updateQuery = new StringBuilder();
+            updateQuery.Append("UPDATE orders ");
+            updateQuery.Append("SET ");
+            updateQuery.Append("payment_id = @payment_id, ");
+            updateQuery.Append("state = @state, ");
+            updateQuery.Append("amount = @amount, ");
+            updateQuery.Append("description = @description, ");
+            updateQuery.Append("updated_at = @updated_at ");
+            updateQuery.Append("WHERE ");
+            updateQuery.Append("id = @id;");
+            using (SQLiteCommand commandSQLite = new SQLiteCommand(updateQuery.ToString()))
+            {
+                commandSQLite.Parameters.AddWithValue("@payment_id", payId);
+                commandSQLite.Parameters.AddWithValue("@state", state);
+                commandSQLite.Parameters.AddWithValue("@amount", amount);
+                commandSQLite.Parameters.AddWithValue("@description", description);
+                commandSQLite.Parameters.AddWithValue("@updated_at", updatedAt);
+                commandSQLite.Parameters.AddWithValue("@id", orderId);
+                DataAccessLayer dataAccessObject = new DataAccessLayer();
+                rowsAffected = dataAccessObject.Execute(commandSQLite);
+            }
+            if (rowsAffected > 0)
+            {
+                isSuccess = true;
+            }
+            return isSuccess;
+        }
+        
         #endregion
 
         #region PayPal
+
         private string AccessToken
         {
             get
@@ -237,7 +243,7 @@ namespace PizzaAppMvc3
                 string token = new OAuthTokenCredential
                                 (
                                    "EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM",
-                                    "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM",
+		                            "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM",
                                     Configuration.GetConfiguration()
                                 ).GetAccessToken();
                 return token;
@@ -254,9 +260,24 @@ namespace PizzaAppMvc3
             }
         }
 
-        public Payment CreatePayment(string email, PaymentMethod paymntMethod, string orderAmount, string orderDescription, string returnUrl, string cancelUrl)
+        private string GetApprovalURL(Payment payment)
         {
-            Payment pymnt = null;
+            string redirectUrl = null;
+            List<Links> links = payment.links;
+            foreach (Links lnk in links)
+            {
+                if (lnk.rel.ToLower().Equals("approval_url"))
+                {
+                    redirectUrl = Server.UrlDecode(lnk.href);
+                    break;
+                }
+            }
+            return redirectUrl;
+        }
+
+        public Payment CreatePayment(string email, PaymentMethod payMethod, string orderAmount, string orderDescription, string returnUrl, string cancelUrl)
+        {
+            Payment pay = null;
 
             Details amountDetails = new Details();
             amountDetails.shipping = "2";
@@ -279,20 +300,20 @@ namespace PizzaAppMvc3
             List<Transaction> transactions = new List<Transaction>();
             transactions.Add(transaction);
 
-            Payer payer = new Payer();
-            payer.payment_method = paymntMethod.ToString();
+            Payer payr = new Payer();
+            payr.payment_method = payMethod.ToString();
 
-            Payment pyment = new Payment();
-            pyment.intent = "sale";
-            pyment.payer = payer;
-            pyment.transactions = transactions;
-            pyment.redirect_urls = redirectUrls;
+            Payment paymnt = new Payment();
+            paymnt.intent = "sale";
+            paymnt.payer = payr;
+            paymnt.transactions = transactions;
+            paymnt.redirect_urls = redirectUrls;
 
-            pymnt = pyment.Create(Api);
-            return pymnt;
+            pay = paymnt.Create(Api);
+            return pay;
         }
 
-        public Payment CreatePayment(string email, PaymentMethod paymntMethod, string orderAmount, string orderDescription)
+        public Payment CreatePayment(string email, PaymentMethod payMethod, string orderAmount, string orderDescription)
         {
             Payment pay = null;
 
@@ -309,38 +330,24 @@ namespace PizzaAppMvc3
 
             FundingInstrument fundingInstrument = new FundingInstrument();
             CreditCardToken creditCardToken = new CreditCardToken();
-            creditCardToken.credit_card_id = GetSignedInUserCreditCardID(email);
+            creditCardToken.credit_card_id = GetSignedInUserCreditCardId(email);
             fundingInstrument.credit_card_token = creditCardToken;
 
             List<FundingInstrument> fundingInstrumentList = new List<FundingInstrument>();
             fundingInstrumentList.Add(fundingInstrument);
 
-            Payer payer = new Payer();
-            payer.funding_instruments = fundingInstrumentList;
-            payer.payment_method = paymntMethod.ToString();
+            Payer payr = new Payer();
+            payr.funding_instruments = fundingInstrumentList;
+            payr.payment_method = payMethod.ToString();
 
-            Payment pyment = new Payment();
-            pyment.intent = "sale";
-            pyment.payer = payer;
-            pyment.transactions = transactions;
-            pay = pyment.Create(Api);
+            Payment paymnt = new Payment();
+            paymnt.intent = "sale";
+            paymnt.payer = payr;
+            paymnt.transactions = transactions;
+            pay = paymnt.Create(Api);
             return pay;
-        }
-
-        private string GetApprovalURL(Payment payment)
-        {
-            string redirectUrl = null;
-            List<Links> links = payment.links;
-            foreach (Links lnk in links)
-            {
-                if (lnk.rel.ToLower().Equals("approval_url"))
-                {
-                    redirectUrl = Server.UrlDecode(lnk.href);
-                    break;
-                }
-            }
-            return redirectUrl;
-        }
+        }        
+        
         #endregion
 
         #region Register
@@ -373,7 +380,10 @@ namespace PizzaAppMvc3
                 model.Amount = Request.QueryString["order[amount]"];
                 model.Description = Request.QueryString["order[description]"];
             }
-
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View(model);
         }
 
@@ -392,7 +402,7 @@ namespace PizzaAppMvc3
                     model.Description = Request.QueryString["order[description]"];
 
                     var email = User.Identity.Name.Trim();
-                    var userID = GetSignedInUserID(email);
+                    var userId = GetSignedInUserId(email);
 
                     if (model.PaymentType != null)
                     {
@@ -400,16 +410,16 @@ namespace PizzaAppMvc3
                         {
                             var amount = model.Amount.Trim();
                             var description = model.Description.Trim();
-                            Payment pymnt = null;
-                            pymnt = CreatePayment(email, PaymentMethod.credit_card, amount, description);
-                            if (pymnt != null)
+                            Payment pay = null;
+                            pay = CreatePayment(email, PaymentMethod.credit_card, amount, description);
+                            if (pay != null)
                             {
-                                var pymntID = pymnt.id;
-                                var state = pymnt.state;
-                                DateTime createdDateTime = Convert.ToDateTime(pymnt.create_time);
+                                var payId = pay.id;
+                                var state = pay.state;
+                                DateTime createdDateTime = Convert.ToDateTime(pay.create_time);
                                 var createdAt = createdDateTime.ToString("yyyy-MM-dd hh:mm:ss.FFFFF");
                                 var updatedAt = createdDateTime.ToString("yyyy-MM-dd hh:mm:ss.FFFFF");
-                                bool isSuccess = Insert(userID, pymntID, state, amount, description, createdAt, updatedAt);
+                                bool isSuccess = Insert(userId, payId, state, amount, description, createdAt, updatedAt);
                                 if (isSuccess)
                                 {
                                     if (state.Trim().ToLower().Equals("approved"))
@@ -441,29 +451,29 @@ namespace PizzaAppMvc3
                             DateTime createdDateTime = DateTime.Now;
                             var createdAt = createdDateTime.ToString("yyyy-MM-dd hh:mm:ss.FFFFF");
                             var updatedAt = createdDateTime.ToString("yyyy-MM-dd hh:mm:ss.FFFFF");
-                            bool isSuccess = Insert(userID, createdAt, updatedAt);
+                            bool isSuccess = Insert(userId, createdAt, updatedAt);
                             if (isSuccess)
                             {
-                                int orderID = GetSignedInUserLastInsertedOrderID(userID);
+                                int orderId = GetSignedInUserLastInsertedOrderId(userId);
                                 string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority + "/Orders/Orders?";
                                 string requestUrl = Request.Url.OriginalString;
-                                string returnUrl = baseURI + "Success=True&OrderID=" + orderID;
-                                string cancelUrl = baseURI + "Success=False&OrderID=" + orderID;
+                                string returnUrl = baseURI + "Success=True&OrderID=" + orderId;
+                                string cancelUrl = baseURI + "Success=False&OrderID=" + orderId;
                                 var amount = model.Amount.Trim();
                                 var description = model.Description.Trim();
-                                Payment pymnt = null;
+                                Payment pay = null;
 
-                                pymnt = CreatePayment(email, PaymentMethod.paypal, amount, description, returnUrl, cancelUrl);
-                                if (pymnt != null)
+                                pay = CreatePayment(email, PaymentMethod.paypal, amount, description, returnUrl, cancelUrl);
+                                if (pay != null)
                                 {
-                                    var pymntID = pymnt.id;
-                                    var state = pymnt.state;
-                                    var updatedAtDateTime = Convert.ToDateTime(pymnt.create_time);
-                                    var pymntUpdatedAt = updatedAtDateTime.ToString("yyyy-MM-dd hh:mm:ss.FFFFF");
-                                    bool isUpdateSuccess = Update(orderID, pymntID, state, amount, description, pymntUpdatedAt);
+                                    var payId = pay.id;
+                                    var state = pay.state;
+                                    var updatedAtDateTime = Convert.ToDateTime(pay.create_time);
+                                    var payUpdatedAt = updatedAtDateTime.ToString("yyyy-MM-dd hh:mm:ss.FFFFF");
+                                    bool isUpdateSuccess = Update(orderId, payId, state, amount, description, payUpdatedAt);
                                     if (isUpdateSuccess)
                                     {
-                                        string dredirectUrl = GetApprovalURL(pymnt);
+                                        string dredirectUrl = GetApprovalURL(pay);
                                         return new RedirectResult(dredirectUrl);
                                     }
                                 }

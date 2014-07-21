@@ -13,49 +13,50 @@ namespace PizzaAppMvc3
     public class AccountController : Controller
     {
         #region Data
-        private DataAccessLayer dataAccessObject;
 
         private DataTable GetUser(string email)
         {
-            DataTable datTable = new DataTable();
-            StringBuilder sqliteQuerySelect = new StringBuilder();
-            sqliteQuerySelect.Append("SELECT ");
-            sqliteQuerySelect.Append("id, ");
-            sqliteQuerySelect.Append("email, ");
-            sqliteQuerySelect.Append("encrypted_password, ");
-            sqliteQuerySelect.Append("sign_in_count, ");
-            sqliteQuerySelect.Append("current_sign_in_at, ");
-            sqliteQuerySelect.Append("last_sign_in_at, ");
-            sqliteQuerySelect.Append("last_sign_in_ip, ");
-            sqliteQuerySelect.Append("created_at, ");
-            sqliteQuerySelect.Append("updated_at, ");
-            sqliteQuerySelect.Append("credit_card_id, ");
-            sqliteQuerySelect.Append("credit_card_description ");
-            sqliteQuerySelect.Append("FROM users ");
-            sqliteQuerySelect.Append("WHERE email = @email");
-            SQLiteDataAdapter sqliteDataAdapterSelect = new SQLiteDataAdapter();
-            sqliteDataAdapterSelect.SelectCommand = new SQLiteCommand();
-            sqliteDataAdapterSelect.SelectCommand.Parameters.AddWithValue("@email", email);
-            dataAccessObject = new DataAccessLayer();
-            datTable = dataAccessObject.Select(sqliteQuerySelect.ToString(), sqliteDataAdapterSelect);
+            DataTable datTable = null;
+            StringBuilder selectQuery = new StringBuilder();
+            selectQuery.Append("SELECT ");
+            selectQuery.Append("id, ");
+            selectQuery.Append("email, ");
+            selectQuery.Append("encrypted_password, ");
+            selectQuery.Append("sign_in_count, ");
+            selectQuery.Append("current_sign_in_at, ");
+            selectQuery.Append("last_sign_in_at, ");
+            selectQuery.Append("last_sign_in_ip, ");
+            selectQuery.Append("created_at, ");
+            selectQuery.Append("updated_at, ");
+            selectQuery.Append("credit_card_id, ");
+            selectQuery.Append("credit_card_description ");
+            selectQuery.Append("FROM users ");
+            selectQuery.Append("WHERE email = @email;");
+            using (SQLiteCommand commandSQLite = new SQLiteCommand(selectQuery.ToString()))
+            {
+                commandSQLite.Parameters.AddWithValue("@email", email);
+                DataAccessLayer dataAccessObject = new DataAccessLayer();
+                datTable = dataAccessObject.Select(commandSQLite);
+            }
             return datTable;
         }
 
         private bool IsPasswordValid(string email, string password)
         {
             bool isValid = false;
+
             string decryptedPassword = null;
             DataTable datTable = GetUser(email);
             if (datTable != null && datTable.Rows.Count > 0)
             {
-                var distinctRows = from DataRow dRow in datTable.Rows
-                                   where dRow.Field<string>("email") == email
-                                   select new { column1 = dRow["encrypted_password"] };
+                var distinctRows = (from DataRow dRow in datTable.Rows
+                                    where dRow.Field<string>("email") == email
+                                    select new { column1 = dRow["encrypted_password"] }).Distinct();
                 if (distinctRows != null)
                 {
                     foreach (var row in distinctRows)
                     {
-                        string encryptedPassword = Convert.ToString(row.column1);
+                        string encryptedPassword = row.column1.ToString();
                         decryptedPassword = Secure.Decrypt(encryptedPassword);
                         break;
                     }
@@ -74,9 +75,9 @@ namespace PizzaAppMvc3
             DataTable datTable = GetUser(email);
             if (datTable != null && datTable.Rows.Count > 0)
             {
-                var distinctRows = from DataRow dRow in datTable.Rows
-                                   where dRow.Field<string>("email") == email
-                                   select new { column1 = dRow["sign_in_count"] };
+                var distinctRows = (from DataRow dRow in datTable.Rows
+                                    where dRow.Field<string>("email") == email
+                                    select new { column1 = dRow["sign_in_count"] }).Distinct();
                 if (distinctRows != null)
                 {
                     foreach (var row in distinctRows)
@@ -89,56 +90,47 @@ namespace PizzaAppMvc3
             return signInCount;
         }
 
-        private bool Update(string email)
+        private bool CheckIsExistingUser(string email)
         {
-            bool isSuccess = false;
-
-            int rowsAffacted = 0;
-            int signInCount = 0;
-
-            DataTable datTable = GetUser(email);
-
+            bool isExistingUser = false;
+            DataTable datTable = null;
+            int rows = 0;
+            StringBuilder selectQuery = new StringBuilder();
+            selectQuery.Append("SELECT ");
+            selectQuery.Append("count(*) AS NumberOfUsers ");
+            selectQuery.Append("FROM users ");
+            selectQuery.Append("WHERE email = @email;");
+            using (SQLiteCommand commandSQLite = new SQLiteCommand(selectQuery.ToString()))
+            {
+                commandSQLite.Parameters.AddWithValue("@email", email);
+                DataAccessLayer dataAccessObject = new DataAccessLayer();
+                datTable = dataAccessObject.Select(commandSQLite);
+            }
             if (datTable != null && datTable.Rows.Count > 0)
             {
-                var distinctRows = from DataRow dRow in datTable.Rows
-                                   where dRow.Field<string>("email") == email
-                                   select new { column1 = dRow["sign_in_count"] };
+                var distinctRows = (from DataRow dRow in datTable.Rows
+                                    select new { column1 = dRow["NumberOfUsers"] }).Distinct();
                 if (distinctRows != null)
                 {
                     foreach (var row in distinctRows)
                     {
-                        signInCount = Convert.ToInt32(row.column1.ToString());
-                        signInCount++;
+                        rows = Convert.ToInt32(row.column1);
                         break;
                     }
                 }
-                StringBuilder sqliteQueryUpdate = new StringBuilder();
-                sqliteQueryUpdate.Append("UPDATE Users ");
-                sqliteQueryUpdate.Append("SET ");
-                sqliteQueryUpdate.Append("sign_in_count = @sign_in_count ");
-                sqliteQueryUpdate.Append("WHERE ");
-                sqliteQueryUpdate.Append("email = @email");
-                SQLiteDataAdapter sqliteDataAdapterUpdate = new SQLiteDataAdapter();
-                sqliteDataAdapterUpdate.UpdateCommand = new SQLiteCommand();
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@email", email);
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@sign_in_count", signInCount);
-                dataAccessObject = new DataAccessLayer();
-                rowsAffacted = dataAccessObject.Update(sqliteQueryUpdate.ToString(), sqliteDataAdapterUpdate);
             }
-            if (rowsAffacted > 0)
+            if (rows == 1)
             {
-                isSuccess = true;
+                isExistingUser = true;
             }
-            return isSuccess;
+            return isExistingUser;
         }
 
-        private bool Insert(SignUpModel model)
+        private bool Insert(string email, string password, string passwordConfirmation,
+            string creditCardType, string creditCardNumber, string creditCardCVV2, string creditCardExpireMonth, string creditCardExpireYear)
         {
             bool isSuccess = false;
-            int rowsAffacted = 0;
-            var email = model.Email.Trim();
-            var password = model.Password.Trim();
-            var passwordConfirmation = model.ConfirmPassword.Trim();
+            int rowsAffected = 0;      
             var encryptedPassword = Secure.Encrypt(password);
             var signInCount = 1;
             var dateTimeNow = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.FFFFF");
@@ -149,156 +141,139 @@ namespace PizzaAppMvc3
             var lastSignInIP = signInIPAddress;
             var createdAt = dateTimeNow;
             var updatedAt = dateTimeNow;
-            CreditCard credCard = CreateCreditCard(model);
-            var creditCardID = credCard.id;
+            CreditCard credCard = CreateCreditCard(creditCardType, creditCardNumber, creditCardCVV2, creditCardExpireMonth, creditCardExpireYear);
+            var creditCardId = credCard.id;
             var creditCardDescription = credCard.number;
-            StringBuilder sqliteQueryInsert = new StringBuilder();
-            sqliteQueryInsert.Append("INSERT INTO users");
-            sqliteQueryInsert.Append("(");
-            sqliteQueryInsert.Append("email, ");
-            sqliteQueryInsert.Append("encrypted_password, ");
-            sqliteQueryInsert.Append("sign_in_count, ");
-            sqliteQueryInsert.Append("current_sign_in_at,");
-            sqliteQueryInsert.Append("last_sign_in_at, ");
-            sqliteQueryInsert.Append("current_sign_in_ip, ");
-            sqliteQueryInsert.Append("last_sign_in_ip, ");
-            sqliteQueryInsert.Append("created_at, ");
-            sqliteQueryInsert.Append("updated_at, ");
-            sqliteQueryInsert.Append("credit_card_id, ");
-            sqliteQueryInsert.Append("credit_card_description ");
-            sqliteQueryInsert.Append(") ");
-            sqliteQueryInsert.Append("VALUES ");
-            sqliteQueryInsert.Append("(");
-            sqliteQueryInsert.Append("@email, ");
-            sqliteQueryInsert.Append("@encrypted_password, ");
-            sqliteQueryInsert.Append("@sign_in_count, ");
-            sqliteQueryInsert.Append("@current_sign_in_at,");
-            sqliteQueryInsert.Append("@last_sign_in_at, ");
-            sqliteQueryInsert.Append("@current_sign_in_ip, ");
-            sqliteQueryInsert.Append("@last_sign_in_ip, ");
-            sqliteQueryInsert.Append("@created_at, ");
-            sqliteQueryInsert.Append("@updated_at, ");
-            sqliteQueryInsert.Append("@credit_card_id, ");
-            sqliteQueryInsert.Append("@credit_card_description ");
-            sqliteQueryInsert.Append(")");
-            SQLiteDataAdapter sqliteDataAdapterInsert = new SQLiteDataAdapter();
-            sqliteDataAdapterInsert.InsertCommand = new SQLiteCommand();
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@email", email);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@encrypted_password", encryptedPassword);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@sign_in_count", signInCount);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@current_sign_in_at", currentSignInAt);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@last_sign_in_at", lastSignInAt);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@current_sign_in_ip", currentSignInIP);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@last_sign_in_ip", lastSignInIP);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@created_at", createdAt);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@updated_at", updatedAt);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@credit_card_id", creditCardID);
-            sqliteDataAdapterInsert.InsertCommand.Parameters.AddWithValue("@credit_card_description", creditCardDescription);
-            dataAccessObject = new DataAccessLayer();
-            rowsAffacted = dataAccessObject.Insert(sqliteQueryInsert.ToString(), sqliteDataAdapterInsert);
-            if (rowsAffacted > 0)
+            StringBuilder insertQuery = new StringBuilder();
+            insertQuery.Append("INSERT INTO users");
+            insertQuery.Append("(");
+            insertQuery.Append("email, ");
+            insertQuery.Append("encrypted_password, ");
+            insertQuery.Append("sign_in_count, ");
+            insertQuery.Append("current_sign_in_at,");
+            insertQuery.Append("last_sign_in_at, ");
+            insertQuery.Append("current_sign_in_ip, ");
+            insertQuery.Append("last_sign_in_ip, ");
+            insertQuery.Append("created_at, ");
+            insertQuery.Append("updated_at, ");
+            insertQuery.Append("credit_card_id, ");
+            insertQuery.Append("credit_card_description ");
+            insertQuery.Append(") ");
+            insertQuery.Append("VALUES ");
+            insertQuery.Append("(");
+            insertQuery.Append("@email, ");
+            insertQuery.Append("@encrypted_password, ");
+            insertQuery.Append("@sign_in_count, ");
+            insertQuery.Append("@current_sign_in_at,");
+            insertQuery.Append("@last_sign_in_at, ");
+            insertQuery.Append("@current_sign_in_ip, ");
+            insertQuery.Append("@last_sign_in_ip, ");
+            insertQuery.Append("@created_at, ");
+            insertQuery.Append("@updated_at, ");
+            insertQuery.Append("@credit_card_id, ");
+            insertQuery.Append("@credit_card_description ");
+            insertQuery.Append(");");
+            using (SQLiteCommand commandSQLite = new SQLiteCommand(insertQuery.ToString()))
+            {
+                commandSQLite.Parameters.AddWithValue("@email", email);
+                commandSQLite.Parameters.AddWithValue("@encrypted_password", encryptedPassword);
+                commandSQLite.Parameters.AddWithValue("@sign_in_count", signInCount);
+                commandSQLite.Parameters.AddWithValue("@current_sign_in_at", currentSignInAt);
+                commandSQLite.Parameters.AddWithValue("@last_sign_in_at", lastSignInAt);
+                commandSQLite.Parameters.AddWithValue("@current_sign_in_ip", currentSignInIP);
+                commandSQLite.Parameters.AddWithValue("@last_sign_in_ip", lastSignInIP);
+                commandSQLite.Parameters.AddWithValue("@created_at", createdAt);
+                commandSQLite.Parameters.AddWithValue("@updated_at", updatedAt);
+                commandSQLite.Parameters.AddWithValue("@credit_card_id", creditCardId);
+                commandSQLite.Parameters.AddWithValue("@credit_card_description", creditCardDescription);
+                DataAccessLayer dataAccessObject = new DataAccessLayer();
+                rowsAffected = dataAccessObject.Execute(commandSQLite);
+            }
+            if (rowsAffected > 0)
             {
                 isSuccess = true;
             }
             return isSuccess;
         }
 
-        private bool CheckIsExistingUser(string email)
-        {
-            bool isExistingUser = false;
-            DataTable datTable = new DataTable();
-            int rows = 0;
-            StringBuilder sqliteQuerySelect = new StringBuilder();
-            sqliteQuerySelect.Append("SELECT ");
-            sqliteQuerySelect.Append("count(*) AS NumberOfUsers ");
-            sqliteQuerySelect.Append("FROM users ");
-            sqliteQuerySelect.Append("WHERE email = @email");
-            SQLiteDataAdapter sqliteDataAdapterSelect = new SQLiteDataAdapter();
-            sqliteDataAdapterSelect.SelectCommand = new SQLiteCommand();
-            sqliteDataAdapterSelect.SelectCommand.Parameters.AddWithValue("@email", email);
-            dataAccessObject = new DataAccessLayer();
-            datTable = dataAccessObject.Select(sqliteQuerySelect.ToString(), sqliteDataAdapterSelect);
-
-            if (datTable != null && datTable.Rows.Count > 0)
-            {
-                var distinctRows = from DataRow dRow in datTable.Rows
-                                   select new { column1 = dRow["NumberOfUsers"] };
-                if (distinctRows != null)
-                {
-                    foreach (var row in distinctRows)
-                    {
-                        rows = Convert.ToInt32(row.column1);
-                        break;
-                    }
-                }
-            }
-            if (rows == 1)
-            {
-                isExistingUser = true;
-            }
-            return isExistingUser;
-        }
-
-        private bool CheckIsExistingUser(SignUpModel model)
-        {
-            bool isExistingUser = false;
-            DataTable datTable = new DataTable();
-            int rows = 0;
-            var email = model.Email.Trim();
-            StringBuilder sqliteQuerySelect = new StringBuilder();
-            sqliteQuerySelect.Append("SELECT ");
-            sqliteQuerySelect.Append("count(*) AS NumberOfUsers ");
-            sqliteQuerySelect.Append("FROM users ");
-            sqliteQuerySelect.Append("WHERE email = @email");
-            SQLiteDataAdapter sqliteDataAdapterSelect = new SQLiteDataAdapter();
-            sqliteDataAdapterSelect.SelectCommand = new SQLiteCommand();
-            sqliteDataAdapterSelect.SelectCommand.Parameters.AddWithValue("@email", email);
-            dataAccessObject = new DataAccessLayer();
-            datTable = dataAccessObject.Select(sqliteQuerySelect.ToString(), sqliteDataAdapterSelect);
-
-            if (datTable != null && datTable.Rows.Count > 0)
-            {
-                var distinctRows = from DataRow dRow in datTable.Rows
-                                   select new { column1 = dRow["NumberOfUsers"] };
-                if (distinctRows != null)
-                {
-                    foreach (var row in distinctRows)
-                    {
-                        rows = Convert.ToInt32(row.column1);
-                        break;
-                    }
-                }
-            }
-            if (rows == 1)
-            {
-                isExistingUser = true;
-            }
-            return isExistingUser;
-        }
-
-        private bool Update(ProfileModel model, string email)
+        private bool Update(string email)
         {
             bool isSuccess = false;
-            int rowsAffacted = 0;
-            var newPassword = model.NewPassword.Trim();
-            var confirmNewPassword = model.ConfirmPassword.Trim();
+            int rowsAffected = 0;
+            int signInCount = 0;
+            DataTable datTable = GetUser(email);
+            if (datTable != null && datTable.Rows.Count > 0)
+            {
+                var distinctRows = (from DataRow dRow in datTable.Rows
+                                    where dRow.Field<string>("email") == email
+                                    select new { column1 = dRow["sign_in_count"] }).Distinct();
+                if (distinctRows != null)
+                {
+                    foreach (var row in distinctRows)
+                    {
+                        signInCount = Convert.ToInt32(row.column1.ToString());
+                        signInCount++;
+                        break;
+                    }
+                }
+                StringBuilder updateQuery = new StringBuilder();
+                updateQuery.Append("UPDATE Users ");
+                updateQuery.Append("SET ");
+                updateQuery.Append("sign_in_count = @sign_in_count ");
+                updateQuery.Append("WHERE ");
+                updateQuery.Append("email = @email;");
+                using (SQLiteCommand commandSQLite = new SQLiteCommand(updateQuery.ToString()))
+                {
+                    commandSQLite.Parameters.AddWithValue("@sign_in_count", signInCount);
+                    commandSQLite.Parameters.AddWithValue("@email", email);
+                    DataAccessLayer dataAccessObject = new DataAccessLayer();
+                    rowsAffected = dataAccessObject.Execute(commandSQLite);
+                }
+            }
+            if (rowsAffected > 0)
+            {
+                isSuccess = true;
+            }
+            return isSuccess;
+        }
+
+        private bool Update(string email, string newPassword, string confirmNewPassword,
+            string newCreditCardType, string newCreditCardNumber, string newCreditCardCVV2, string newCreditCardExpireMonth, string newCreditCardExpireYear)
+        {
+            bool isSuccess = false;
+
+            int rowsAffected = 0;
             var encryptedNewPassword = Secure.Encrypt(newPassword);
             var signInCount = 0;
             var dateTimeNow = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.FFFFF");
             var currentSignInAt = dateTimeNow;
+
+            // Set last signed in IP Address from database
             var lastSignInAt = string.Empty;
+
+            // Set first signed in IP Address from database
             var signInIPAddress = string.Empty;
+
+            // Set current signed in IP Address
             var currentSignInIP = string.Empty;
+
+            // Set last signed in IP Address from database
             var lastSignInIP = string.Empty;
+
             var createdAt = string.Empty;
             var updatedAt = dateTimeNow;
-
             DataTable datTable = GetUser(email);
             if (datTable != null && datTable.Rows.Count > 0)
             {
-                var distinctRows = from DataRow dRow in datTable.Rows
-                                   where dRow.Field<string>("email") == email
-                                   select new { column1 = dRow["sign_in_count"], column2 = dRow["last_sign_in_at"], column3 = dRow["last_sign_in_ip"], column4 = dRow["created_at"] };
+                var distinctRows = (from DataRow dRow in datTable.Rows
+                                    where dRow.Field<string>("email") == email
+                                    select new
+                                    {
+                                        column1 = dRow["sign_in_count"],
+                                        column2 = dRow["last_sign_in_at"],
+                                        column3 = dRow["last_sign_in_ip"],
+                                        column4 = dRow["created_at"]
+                                    }).Distinct();
                 if (distinctRows != null)
                 {
                     foreach (var row in distinctRows)
@@ -313,40 +288,41 @@ namespace PizzaAppMvc3
                         break;
                     }
                 }
-                CreditCard credCard = CreateCreditCard(model);
-                var creditCardID = credCard.id;
+                CreditCard credCard = CreateCreditCard(newCreditCardType, newCreditCardNumber, newCreditCardCVV2, newCreditCardExpireMonth, newCreditCardExpireYear);
+                var creditCardId = credCard.id;
                 var creditCardDescription = credCard.number;
-                StringBuilder sqliteQueryUpdate = new StringBuilder();
-                sqliteQueryUpdate.Append("UPDATE Users ");
-                sqliteQueryUpdate.Append("SET ");
-                sqliteQueryUpdate.Append("encrypted_password = @encrypted_password, ");
-                sqliteQueryUpdate.Append("sign_in_count = @sign_in_count, ");
-                sqliteQueryUpdate.Append("current_sign_in_at = @current_sign_in_at, ");
-                sqliteQueryUpdate.Append("last_sign_in_at = @last_sign_in_at, ");
-                sqliteQueryUpdate.Append("current_sign_in_ip = @current_sign_in_ip, ");
-                sqliteQueryUpdate.Append("last_sign_in_ip = @last_sign_in_ip, ");
-                sqliteQueryUpdate.Append("created_at = @created_at, ");
-                sqliteQueryUpdate.Append("credit_card_id = @credit_card_id, ");
-                sqliteQueryUpdate.Append("credit_card_description = @credit_card_description ");
-                sqliteQueryUpdate.Append("WHERE ");
-                sqliteQueryUpdate.Append("email = @email");
-                SQLiteDataAdapter sqliteDataAdapterUpdate = new SQLiteDataAdapter();
-                sqliteDataAdapterUpdate.UpdateCommand = new SQLiteCommand();
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@email", email);
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@encrypted_password", encryptedNewPassword);
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@sign_in_count", signInCount);
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@current_sign_in_at", currentSignInAt);
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@last_sign_in_at", lastSignInAt);
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@current_sign_in_ip", currentSignInIP);
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@last_sign_in_ip", lastSignInIP);
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@created_at", createdAt);
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@updated_at", updatedAt);
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@credit_card_id", creditCardID);
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@credit_card_description", creditCardDescription);
-                dataAccessObject = new DataAccessLayer();
-                rowsAffacted = dataAccessObject.Update(sqliteQueryUpdate.ToString(), sqliteDataAdapterUpdate);
+                StringBuilder updateQuery = new StringBuilder();
+                updateQuery.Append("UPDATE Users ");
+                updateQuery.Append("SET ");
+                updateQuery.Append("encrypted_password = @encrypted_password, ");
+                updateQuery.Append("sign_in_count = @sign_in_count, ");
+                updateQuery.Append("current_sign_in_at = @current_sign_in_at, ");
+                updateQuery.Append("last_sign_in_at = @last_sign_in_at, ");
+                updateQuery.Append("current_sign_in_ip = @current_sign_in_ip, ");
+                updateQuery.Append("last_sign_in_ip = @last_sign_in_ip, ");
+                updateQuery.Append("created_at = @created_at, ");
+                updateQuery.Append("credit_card_id = @credit_card_id, ");
+                updateQuery.Append("credit_card_description = @credit_card_description ");
+                updateQuery.Append("WHERE ");
+                updateQuery.Append("email = @email;");
+                using (SQLiteCommand commandSQLite = new SQLiteCommand(updateQuery.ToString()))
+                {
+                    commandSQLite.Parameters.AddWithValue("@email", email);
+                    commandSQLite.Parameters.AddWithValue("@encrypted_password", encryptedNewPassword);
+                    commandSQLite.Parameters.AddWithValue("@sign_in_count", signInCount);
+                    commandSQLite.Parameters.AddWithValue("@current_sign_in_at", currentSignInAt);
+                    commandSQLite.Parameters.AddWithValue("@last_sign_in_at", lastSignInAt);
+                    commandSQLite.Parameters.AddWithValue("@current_sign_in_ip", currentSignInIP);
+                    commandSQLite.Parameters.AddWithValue("@last_sign_in_ip", lastSignInIP);
+                    commandSQLite.Parameters.AddWithValue("@created_at", createdAt);
+                    commandSQLite.Parameters.AddWithValue("@updated_at", updatedAt);
+                    commandSQLite.Parameters.AddWithValue("@credit_card_id", creditCardId);
+                    commandSQLite.Parameters.AddWithValue("@credit_card_description", creditCardDescription);
+                    DataAccessLayer dataAccessObject = new DataAccessLayer();
+                    rowsAffected = dataAccessObject.Execute(commandSQLite);
+                }
             }
-            if (rowsAffacted > 0)
+            if (rowsAffected > 0)
             {
                 isSuccess = true;
             }
@@ -398,33 +374,21 @@ namespace PizzaAppMvc3
             }
         }
 
-        public CreditCard CreateCreditCard(SignUpModel model)
+        public CreditCard CreateCreditCard(string creditCardType, string creditCardNumber, string creditCardCVV2, string creditCardExpireMonth, string creditCardExpireYear)
         {
             CreditCard card = null;
-            CreditCard cardCredit = new CreditCard();
-            cardCredit.number = model.CreditCardNumber.Trim();
-            cardCredit.type = model.CreditCardType.Trim();
-            cardCredit.cvv2 = model.CreditCardCVV2.Trim();
-            cardCredit.expire_month = Convert.ToInt32(model.CreditCardExpireMonth.Trim());
-            cardCredit.expire_year = Convert.ToInt32(model.CreditCardExpireYear.Trim());
-            card = cardCredit.Create(Api);
+            CreditCard credCard = new CreditCard();
+            credCard.type = creditCardType;
+            credCard.number = creditCardNumber;
+            credCard.cvv2 = creditCardCVV2;            
+            credCard.expire_month = System.Convert.ToInt32(creditCardExpireMonth);
+            credCard.expire_year = System.Convert.ToInt32(creditCardExpireYear);
+            card = credCard.Create(Api);
             return card;
         }
 
-        public CreditCard CreateCreditCard(ProfileModel model)
-        {
-            CreditCard card = null;
-            CreditCard cardCredit = new CreditCard();
-            cardCredit.number = model.NewCreditCardNumber.Trim();
-            cardCredit.type = model.NewCreditCardType.Trim();
-            cardCredit.cvv2 = model.NewCreditCardCVV2.Trim();
-            cardCredit.expire_month = Convert.ToInt32(model.NewCreditCardExpireMonth.Trim());
-            cardCredit.expire_year = Convert.ToInt32(model.NewCreditCardExpireYear.Trim());
-            card = cardCredit.Create(Api);
-            return card;
-        }
         #endregion
-
+        
         #region Register
         private SelectListItem[] RegisterCreditCardTypes(bool isValid)
         {
@@ -541,7 +505,7 @@ namespace PizzaAppMvc3
                 new SelectListItem { Text = "2023", Value = "2023" }, 
             };
             return model.NewCreditCardExpireYears;
-        }
+        }      
         #endregion
 
         #region ActionResult
@@ -621,17 +585,25 @@ namespace PizzaAppMvc3
 
         [HttpPost]
         public ActionResult SignUp(SignUpModel model)
-        {
+        {            
             if (ModelState.IsValid)
             {
-                bool isExistingUser = CheckIsExistingUser(model);
+                var email = model.Email.Trim();
+                bool isExistingUser = CheckIsExistingUser(email);
                 if (isExistingUser)
                 {
                     ModelState.AddModelError(string.Empty, "Email already exists.");
                 }
                 else
                 {
-                    bool isSuccess = Insert(model);
+                    var password = model.Password.Trim();
+                    var passwordConfirmation = model.ConfirmPassword.Trim();
+                    var creditCardNumber = model.CreditCardNumber.Trim();
+                    var creditCardCVV2 = model.CreditCardCVV2.Trim();
+                    var creditCardType = model.CreditCardType.Trim();
+                    var creditCardExpireMonth = model.CreditCardExpireMonth.Trim();
+                    var creditCardExpireYear = model.CreditCardExpireYear.Trim();
+                    bool isSuccess = Insert(email, password, passwordConfirmation, creditCardType, creditCardNumber, creditCardCVV2, creditCardExpireMonth, creditCardExpireYear);
                     if (isSuccess)
                     {
                         FormsAuthentication.SetAuthCookie(model.Email, false /* createPersistentCookie */);
@@ -642,12 +614,12 @@ namespace PizzaAppMvc3
                         ModelState.AddModelError(string.Empty, "Registration failed.");
                     }
                 }
-            }
+            }                      
 
             if (model.CreditCardTypes == null)
             {
                 model.CreditCardTypes = RegisterCreditCardTypes(true);
-            }
+            }        
 
             if (model.CreditCardExpireMonths == null)
             {
@@ -663,7 +635,7 @@ namespace PizzaAppMvc3
 
         //
         // GET: /Account/
-
+        
         [Authorize]
         public ActionResult Profile()
         {
@@ -683,7 +655,7 @@ namespace PizzaAppMvc3
             else
             {
                 RedirectToAction("Index", "Home");
-            }
+            }    
 
             return View(model);
         }
@@ -701,16 +673,25 @@ namespace PizzaAppMvc3
                     bool isValid = IsPasswordValid(email, model.CurrentPassword.Trim());
                     if (isValid)
                     {
-                        bool isSuccess = Update(model, email);
+                        var newPassword = model.NewPassword.Trim();
+                        var confirmNewPassword = model.ConfirmNewPassword.Trim();
+                        var newCreditCardType = model.NewCreditCardType.Trim();
+                        var newCreditCardNumber = model.NewCreditCardNumber.Trim();
+                        var newCreditCardCVV2 = model.NewCreditCardCVV2.Trim();
+                        var newCreditCardExpireMonth = model.NewCreditCardExpireMonth.Trim();
+                        var newCreditCardExpireYear = model.NewCreditCardExpireYear.Trim();
+
+                        bool isSuccess = Update(email, newPassword, confirmNewPassword,
+                            newCreditCardType, newCreditCardNumber, newCreditCardCVV2, newCreditCardExpireMonth, newCreditCardExpireYear);
                         if (isSuccess)
                         {
-                            changeProfileSucceeded = true;
-                        }
+                            changeProfileSucceeded = true;                           
+                        }                        
                     }
                     else
                     {
                         ModelState.AddModelError(string.Empty, "The current password provided is incorrect.");
-                    }
+                    }                    
                 }
                 catch (Exception)
                 {
@@ -718,7 +699,7 @@ namespace PizzaAppMvc3
                 }
 
                 if (changeProfileSucceeded)
-                {
+                {               
                     return RedirectToAction("Index", "Home");
                 }
                 else

@@ -10,25 +10,24 @@ namespace PizzaApp
     public partial class SignIn : System.Web.UI.Page
     {
         #region Data
-        private DataAccessLayer dataAccessObject;
-
         private DataTable GetUser(string email)
         {
-            DataTable datTable = new DataTable();
-            StringBuilder sqliteQuerySelect = new StringBuilder();
-            sqliteQuerySelect.Append("SELECT ");
-            sqliteQuerySelect.Append("id, ");
-            sqliteQuerySelect.Append("email, ");
-            sqliteQuerySelect.Append("encrypted_password, ");
-            sqliteQuerySelect.Append("sign_in_count ");
-            sqliteQuerySelect.Append("FROM users ");
-            sqliteQuerySelect.Append("WHERE email = @email");
-            SQLiteDataAdapter sqliteDataAdapterSelect = new SQLiteDataAdapter();
-            sqliteDataAdapterSelect.SelectCommand = new SQLiteCommand();
-            sqliteDataAdapterSelect.SelectCommand.Parameters.AddWithValue("@email", email);
-            dataAccessObject = new DataAccessLayer();
-            datTable = dataAccessObject.Select(sqliteQuerySelect.ToString(), sqliteDataAdapterSelect);
-            return datTable;
+            DataTable datTable = null;
+            StringBuilder selectQuery = new StringBuilder();
+            selectQuery.Append("SELECT ");
+            selectQuery.Append("id, ");
+            selectQuery.Append("email, ");
+            selectQuery.Append("encrypted_password, ");
+            selectQuery.Append("sign_in_count ");
+            selectQuery.Append("FROM users ");
+            selectQuery.Append("WHERE email = @email;");
+            using (SQLiteCommand commandSQLite = new SQLiteCommand(selectQuery.ToString()))
+            {
+                commandSQLite.Parameters.AddWithValue("@email", email);
+                DataAccessLayer dataAccessObject = new DataAccessLayer();
+                datTable = dataAccessObject.Select(commandSQLite);                    
+            }           
+            return datTable;      
         }
 
         private bool IsPasswordValid(string email, string password)
@@ -38,9 +37,9 @@ namespace PizzaApp
             DataTable datTable = GetUser(email);
             if (datTable != null && datTable.Rows.Count > 0)
             {
-                var distinctRows = from DataRow dRow in datTable.Rows
+                var distinctRows = (from DataRow dRow in datTable.Rows
                                    where dRow.Field<string>("email") == email
-                                   select new { column1 = dRow["encrypted_password"] };
+                                    select new { column1 = dRow["encrypted_password"] }).Distinct();
                 if (distinctRows != null)
                 {
                     foreach (var row in distinctRows)
@@ -64,9 +63,9 @@ namespace PizzaApp
             DataTable datTable = GetUser(email);
             if (datTable != null && datTable.Rows.Count > 0)
             {
-                var distinctRows = from DataRow dRow in datTable.Rows
+                var distinctRows = (from DataRow dRow in datTable.Rows
                                    where dRow.Field<string>("email") == email
-                                   select new { column1 = dRow["sign_in_count"] };
+                                    select new { column1 = dRow["sign_in_count"] }).Distinct();
                 if (distinctRows != null)
                 {
                     foreach (var row in distinctRows)
@@ -82,17 +81,14 @@ namespace PizzaApp
         private bool Update(string email)
         {
             bool isSuccess = false;
-
-            int rowsAffacted = 0;
+            int rowsAffected = 0;
             int signInCount = 0;
-
             DataTable datTable = GetUser(email);
-
             if (datTable != null && datTable.Rows.Count > 0)
             {
-                var distinctRows = from DataRow dRow in datTable.Rows
+                var distinctRows = (from DataRow dRow in datTable.Rows
                                    where dRow.Field<string>("email") == email
-                                   select new { column1 = dRow["sign_in_count"] };
+                                    select new { column1 = dRow["sign_in_count"] }).Distinct();
                 if (distinctRows != null)
                 {
                     foreach (var row in distinctRows)
@@ -102,20 +98,21 @@ namespace PizzaApp
                         break;
                     }
                 }
-                StringBuilder sqliteQueryUpdate = new StringBuilder();
-                sqliteQueryUpdate.Append("UPDATE Users ");
-                sqliteQueryUpdate.Append("SET ");
-                sqliteQueryUpdate.Append("sign_in_count = @sign_in_count ");
-                sqliteQueryUpdate.Append("WHERE ");
-                sqliteQueryUpdate.Append("email = @email");
-                SQLiteDataAdapter sqliteDataAdapterUpdate = new SQLiteDataAdapter();
-                sqliteDataAdapterUpdate.UpdateCommand = new SQLiteCommand();
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@email", email);
-                sqliteDataAdapterUpdate.UpdateCommand.Parameters.AddWithValue("@sign_in_count", signInCount);
-                dataAccessObject = new DataAccessLayer();
-                rowsAffacted = dataAccessObject.Update(sqliteQueryUpdate.ToString(), sqliteDataAdapterUpdate);
+                StringBuilder updateQuery = new StringBuilder();
+                updateQuery.Append("UPDATE Users ");
+                updateQuery.Append("SET ");
+                updateQuery.Append("sign_in_count = @sign_in_count ");
+                updateQuery.Append("WHERE ");
+                updateQuery.Append("email = @email;");
+                using (SQLiteCommand commandSQLite = new SQLiteCommand(updateQuery.ToString()))
+                {
+                    commandSQLite.Parameters.AddWithValue("@sign_in_count", signInCount);
+                    commandSQLite.Parameters.AddWithValue("@email", email);
+                    DataAccessLayer dataAccessObject = new DataAccessLayer();
+                    rowsAffected = dataAccessObject.Execute(commandSQLite);
+                }
             }
-            if (rowsAffacted > 0)
+            if (rowsAffected > 0)
             {
                 isSuccess = true;
             }

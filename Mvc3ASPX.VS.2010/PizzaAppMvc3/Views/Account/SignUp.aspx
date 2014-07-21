@@ -46,20 +46,20 @@
                 </div>
                 <h4>Add Credit Card</h4>
                 <p>Your credit card information is stored safely with PayPal.</p>
-                <div class="string required control-label">
-                    <%: Html.LabelFor(m => m.CreditCardNumber) %>
-                </div>
-                <div class="controls">
-                    <%: Html.TextBoxFor(m => m.CreditCardNumber) %>
-                    <%: Html.ValidationMessageFor(m => m.CreditCardNumber) %>
-                </div>
-                <div class="string optional control-label">
+                 <div class="string optional control-label">
                     <%: Html.LabelFor(m => m.CreditCardTypes) %>
                 </div>
                 <div class="controls"> 
                     <%: Html.DropDownListFor(m => m.CreditCardType, new SelectList(Model.CreditCardTypes, "Value", "Text")) %>   
                     <%: Html.ValidationMessageFor(m => m.CreditCardType) %> 
                 </div>
+                <div class="string required control-label">
+                    <%: Html.LabelFor(m => m.CreditCardNumber) %>
+                </div>
+                <div class="controls">
+                    <%: Html.TextBoxFor(m => m.CreditCardNumber) %>
+                    <%: Html.ValidationMessageFor(m => m.CreditCardNumber) %>
+                </div>               
                 <div class="string optional control-label">
                     <%: Html.LabelFor(m => m.CreditCardCVV2) %>
                 </div>

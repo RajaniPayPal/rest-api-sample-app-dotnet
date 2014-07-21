@@ -33,14 +33,11 @@ namespace PizzaAppMvc3
         [Display(Name = "Password")]
         public string Password { get; set; }
 
+        [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Confirm Password")]
         [System.Web.Mvc.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-
-        [Required]
-        [Display(Name = "Credit Card Number")]
-        public string CreditCardNumber { get; set; }
 
         [Required]
         public string CreditCardType { get; set; }
@@ -48,6 +45,10 @@ namespace PizzaAppMvc3
         [Display(Name = "Credit Card Type")]
         public System.Web.Mvc.SelectListItem[] CreditCardTypes { get; set; }
 
+        [Required]
+        [Display(Name = "Credit Card Number")]
+        public string CreditCardNumber { get; set; }
+        
         [Required]
         [Display(Name = "Credit Card CVV2")]
         public string CreditCardCVV2 { get; set; }
@@ -82,17 +83,14 @@ namespace PizzaAppMvc3
         [Display(Name = "New Password")]
         public string NewPassword { get; set; }
 
+        [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Confirm New Password")]
         [System.Web.Mvc.Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
+        public string ConfirmNewPassword { get; set; }
 
         [Display(Name = "Current Credit Card Number")]
         public string CurrentCreditCardNumber { get; set; }
-
-        [Required]
-        [Display(Name = "New Credit Card Number")]
-        public string NewCreditCardNumber { get; set; }
 
         [Required]
         public string NewCreditCardType { get; set; }
@@ -100,6 +98,10 @@ namespace PizzaAppMvc3
         [Display(Name = "New Credit Card Type")]
         public SelectListItem[] NewCreditCardTypes { get; set; }
 
+        [Required]
+        [Display(Name = "New Credit Card Number")]
+        public string NewCreditCardNumber { get; set; }
+        
         [Required]
         [Display(Name = "New Credit Card CVV2")]
         public string NewCreditCardCVV2 { get; set; }

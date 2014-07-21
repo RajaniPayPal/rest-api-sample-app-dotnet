@@ -10,9 +10,9 @@ namespace PizzaAppMvc3
 
     public class Order
     {
-        public int OrderID { get; set; }
-        public int UserID { get; set; }
-        public string PaymentID { get; set; }
+        public int OrderId { get; set; }
+        public int UserId { get; set; }
+        public string PaymentId { get; set; }
         public string State { get; set; }
         public string AmountInUSD { get; set; }
         public string Description { get; set; }

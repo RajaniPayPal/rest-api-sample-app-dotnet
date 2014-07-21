@@ -85,12 +85,14 @@
                     ForeColor="#FF0000" ValidationGroup="EditGroup" />
             </div>
         </div>
+        <h4>Update Credit Card</h4>
+        <p>Your credit card information is stored safely with PayPal.</p> 
         <div class="control-group">
             <asp:Label runat="server" ID="LabelCurrentCreditCardNumber" Text="Current Credit Card Number" />
             <div class="controls">
                 <asp:TextBox ID="TextBoxCurrentCreditCardNumber" runat="server" ReadOnly="true"></asp:TextBox>
             </div>
-        </div>
+        </div>        
         <div class="control-group select required">
             <asp:Label runat="server" ID="LabelNewCreditCardType" CssClass="string required control-label"
                 Text="New Credit Card Type" />

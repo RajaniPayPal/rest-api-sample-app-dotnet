@@ -96,10 +96,8 @@
                     ForeColor="#FF0000" ValidationGroup="SignUpGroup" />
             </div>
         </div>
-        <h4>
-            Add Credit Card</h4>
-        <p>
-            Your credit card information is stored safely with PayPal.</p>
+        <h4>Add Credit Card</h4>
+        <p>Your credit card information is stored safely with PayPal.</p> 
         <div class="control-group select required">
             <asp:Label runat="server" ID="LabelCreditCardType" CssClass="string required control-label"
                 Text="Credit Card Type" />

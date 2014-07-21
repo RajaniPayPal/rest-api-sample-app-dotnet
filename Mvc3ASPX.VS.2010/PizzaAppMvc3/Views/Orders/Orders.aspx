@@ -26,9 +26,9 @@
      var grid = new WebGrid(Model); %>
         <%: grid.GetHtml(columns: grid.Columns
             (
-                grid.Column("OrderID", header: "Order ID", format: m => Convert.ToInt32(m.OrderID)),
-                grid.Column("UserID", header: "User ID", format: m => Convert.ToInt32(m.UserID)),
-                grid.Column("PaymentID", header: "Payment ID", format: m => m.PaymentID.ToString()),
+                grid.Column("OrderId", header: "Order Id", format: m => Convert.ToInt32(m.OrderId)),
+                grid.Column("UserId", header: "User Id", format: m => Convert.ToInt32(m.UserId)),
+                grid.Column("PaymentId", header: "Payment Id", format: m => m.PaymentId.ToString()),
                 grid.Column("State", header: "State", format: m => m.State.ToString()),                            
                 grid.Column("AmountInUSD", header: "Amount In USD", format: m => m.AmountInUSD.ToString()),
                 grid.Column("Description", header: "Description", format: m => m.Description.ToString()),

@@ -1,102 +1,50 @@
-﻿using System;
+﻿using System.Configuration;
 using System.Data;
-using System.Configuration;
 using System.Data.SQLite;
 
 namespace PizzaAppMvc3
 {
-    public class DataAccessLayer
+    class DataAccessLayer
     {
         private string ConnectionString
         {
             get
             {
-                ConnectionStringSettingsCollection ConnectionStringSetting = ConfigurationManager.ConnectionStrings;
-                return ConnectionStringSetting["ConnectionString"].ConnectionString;
+                ConnectionStringSettingsCollection connectionStringSettings = ConfigurationManager.ConnectionStrings;
+                return connectionStringSettings["ConnectionString"].ConnectionString;
             }
         }
 
-        public DataTable Select(string sqliteQuerySelect, SQLiteDataAdapter dataAdapterSQLite)
+        public DataTable Select(SQLiteCommand commandSQLite)
         {
-           DataTable datTable = new DataTable();
-           try
-           {
-               using (SQLiteConnection connectionSQLite = new SQLiteConnection(ConnectionString))
-               {
-                   dataAdapterSQLite.SelectCommand.CommandText = sqliteQuerySelect;
-                   dataAdapterSQLite.SelectCommand.Connection = connectionSQLite;
-                   connectionSQLite.Open();
-                   dataAdapterSQLite.Fill(datTable);
-               }
-           }
-           catch (Exception ex)
-           {
-               throw ex;
-           }
-           return datTable;
-        }
-
-
-        public int Insert(string sqliteQueryInsert, SQLiteDataAdapter sqliteDataAdapterInsert)
-        {
-            int rowsAffacted = 0;
+            DataTable datTable = null;
             try
             {
                 using (SQLiteConnection connectionSQLite = new SQLiteConnection(ConnectionString))
                 {
-                    sqliteDataAdapterInsert.InsertCommand.CommandText = sqliteQueryInsert;
-                    sqliteDataAdapterInsert.InsertCommand.Connection = connectionSQLite;
-                    connectionSQLite.Open();
-                    rowsAffacted = sqliteDataAdapterInsert.InsertCommand.ExecuteNonQuery();
+                    commandSQLite.Connection = connectionSQLite;
+                    commandSQLite.Connection.Open();
+                    datTable = new DataTable();
+                    datTable.Load(commandSQLite.ExecuteReader());
+                    return datTable;
                 }
             }
-            catch (Exception ex)
+            finally
             {
-                throw ex;
+                datTable = null;
             }
-            return rowsAffacted;
         }
 
-        public int Update(string sqliteQueryUpdate, SQLiteDataAdapter sqliteDataAdapterUpdate)
+        public int Execute(SQLiteCommand commandSQLite)
         {
-            int rowsAffacted = 0;
-
-            try
+            int rowsAffected = 0;
+            using (SQLiteConnection connectionSQLite = new SQLiteConnection(ConnectionString))
             {
-                using (SQLiteConnection connectionSQLite = new SQLiteConnection(ConnectionString))
-                {
-                    sqliteDataAdapterUpdate.UpdateCommand.CommandText = sqliteQueryUpdate;
-                    sqliteDataAdapterUpdate.UpdateCommand.Connection = connectionSQLite;
-                    connectionSQLite.Open();
-                    rowsAffacted = sqliteDataAdapterUpdate.UpdateCommand.ExecuteNonQuery();
-                }
+                commandSQLite.Connection = connectionSQLite;
+                commandSQLite.Connection.Open();
+                rowsAffected = commandSQLite.ExecuteNonQuery();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return rowsAffacted;
+            return rowsAffected;
         }
-
-        public int Delete(string sqliteQueryDelete, SQLiteDataAdapter sqliteDataAdapterDelete)
-        {
-            int rowsAffacted = 0;
-
-            try
-            {
-                using (SQLiteConnection connectionSQLite = new SQLiteConnection(ConnectionString))
-                {
-                    sqliteDataAdapterDelete.DeleteCommand.CommandText = sqliteQueryDelete;
-                    sqliteDataAdapterDelete.DeleteCommand.Connection = connectionSQLite;
-                    connectionSQLite.Open();
-                    rowsAffacted = sqliteDataAdapterDelete.DeleteCommand.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return rowsAffacted;
-        }       
     }
 }
